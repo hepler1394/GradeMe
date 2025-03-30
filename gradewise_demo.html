@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Using the name you specified -->
+    <title>GradeWise AI - Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      /* --- Base Styles & Fonts --- */
+      @font-face {
+        font-family: 'LucideIcons';
+        src: url('https://unpkg.com/lucide-static@latest/font/lucide.ttf') format('truetype');
+      }
+      .lucide {
+        font-family: 'LucideIcons'; font-size: 1.125rem; line-height: 1;
+        -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+        font-style: normal; font-variant: normal; text-rendering: auto;
+        display: inline-block; vertical-align: middle;
+      }
+      body {
+        font-family: 'Inter', sans-serif; background-color: #f9fafb; /* bg-gray-50 */
+        color: #1f2937; /* gray-800 */ display: flex; height: 100vh; overflow: hidden;
+      }
+      .hidden { display: none; }
+
+      /* --- Sidebar Styles --- */
+      #sidebar {
+        width: 256px; flex-shrink: 0; background-color: white;
+        border-right: 1px solid #e5e7eb; /* border-gray-200 */
+        padding: 1rem; /* p-4 */ display: flex; flex-direction: column; justify-content: space-between;
+      }
+      .sidebar-link {
+          display: flex; align-items: center; padding: 0.75rem 1rem; /* py-3 px-4 */
+          border-radius: 0.5rem; /* rounded-lg */ color: #4b5563; /* gray-600 */
+          font-weight: 500; /* medium */ transition: all 0.2s ease-in-out;
+          margin: 0.125rem 0; /* my-0.5 */ cursor: pointer; /* Added cursor pointer */
+      }
+      .sidebar-link:hover { background-color: #f3f4f6; color: #111827; }
+      .sidebar-link.active { background-color: #eff6ff; color: #2563eb; font-weight: 600; }
+      .sidebar-link .lucide { margin-right: 0.75rem; font-size: 1.25rem; } /* mr-3 */
+
+      /* --- Main Content Area --- */
+      #main-content { flex-grow: 1; overflow-y: auto; height: 100vh; padding: 2rem; /* p-8 */ }
+
+      /* --- Modern Card Styling (Used across sections) --- */
+      .content-card {
+          background-color: white; padding: 1.5rem 2rem; /* py-6 px-8 */
+          border-radius: 0.75rem; /* rounded-xl */
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+          margin-bottom: 2rem; /* mb-8 */ border: 1px solid #e5e7eb; /* border-gray-200 */
+      }
+
+      /* --- Modern Input & Label Styling --- */
+      .input-label {
+          display: block; font-weight: 500; margin-bottom: 0.5rem; /* mb-2 */
+          color: #374151; /* gray-700 */ font-size: 0.875rem; /* text-sm */
+      }
+      .input-field { /* Used for text inputs and textareas */
+          display: block; width: 100%; padding: 0.75rem 1rem; /* py-3 px-4 */
+          border: 1px solid #d1d5db; border-radius: 0.5rem; /* rounded-lg */
+          background-color: #f9fafb; /* bg-gray-50 */ font-size: 0.875rem; /* text-sm */
+          transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s;
+      }
+      .input-field:focus {
+          outline: none; border-color: #60a5fa; /* focus:border-blue-400 */
+          box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3); background-color: white;
+      }
+      textarea.input-field { min-height: 120px; }
+
+      /* --- Enhanced File Input Styling --- */
+      .file-input-area {
+          border: 2px dashed #d1d5db; border-radius: 0.5rem; padding: 1.5rem; /* p-6 */
+          text-align: center; cursor: pointer; background-color: #f9fafb; /* bg-gray-50 */
+          transition: border-color 0.2s ease-in-out, background-color 0.2s; position: relative;
+      }
+      .file-input-area:hover { border-color: #9ca3af; background-color: #f3f4f6; }
+      .file-input-area input[type="file"] {
+          position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;
+      }
+      .file-input-visual { color: #6b7280; font-size: 0.875rem; }
+      .file-input-visual .lucide { font-size: 1.5rem; color: #9ca3af; margin-bottom: 0.5rem; }
+      .file-input-browse { color: #2563eb; font-weight: 500; }
+      .file-name-display {
+          margin-top: 0.75rem; font-size: 0.8rem; color: #4b5563; /* text-gray-600 */
+          font-style: italic; word-break: break-all;
+      }
+
+      /* --- Modern Button Styling --- */
+      .btn {
+          display: inline-flex; align-items: center; justify-content: center;
+          padding: 0.65rem 1.25rem; /* Adjusted padding */ border: 1px solid transparent;
+          border-radius: 0.5rem; /* rounded-lg */ font-weight: 600; /* semibold */
+          text-align: center; cursor: pointer; transition: all 0.2s ease-in-out;
+          box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); font-size: 0.875rem; /* text-sm */
+      }
+      .btn .lucide { margin-right: 0.5rem; font-size: 1.1rem; }
+      .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.75rem; } /* Smaller button */
+      .btn-sm .lucide { margin-right: 0.3rem; font-size: 0.9rem; }
+      .btn-primary { background-color: #2563eb; color: white; }
+      .btn-primary:hover { background-color: #1d4ed8; box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1); }
+      .btn-primary:disabled { background-color: #93c5fd; cursor: not-allowed; opacity: 0.7; }
+      .btn-secondary { background-color: #e5e7eb; color: #374151; border-color: #d1d5db; }
+      .btn-secondary:hover { background-color: #d1d5db; }
+      .btn-danger { background-color: #fee2e2; color: #b91c1c; } /* Red-100/Red-700 */
+      .btn-danger:hover { background-color: #fecaca; } /* Red-200 */
+
+      /* --- Grading Section Specific Styles --- */
+      .tab-button { /* Criteria Tabs */
+           padding: 0.6rem 1.1rem; border-bottom: 2px solid transparent;
+           margin-right: 0.5rem; cursor: pointer; color: #6b7280; /* gray-500 */
+           font-weight: 500; font-size: 0.875rem; transition: color 0.2s, border-color 0.2s;
+       }
+      .tab-button.active { color: #2563eb; border-bottom-color: #2563eb; }
+      .tab-content { display: none; margin-top: 1.5rem; } /* mt-6 */
+      .tab-content.active { display: block; }
+
+      .grading-spinner { /* Button Spinner */
+        border: 3px solid rgba(255, 255, 255, 0.3); width: 18px; height: 18px;
+        border-radius: 50%; border-left-color: #ffffff;
+        animation: spin 1s ease infinite; margin-right: 0.75rem; /* mr-3 */
+      }
+      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+      #grading-results-content { /* Results Text Area */
+          background-color: #f3f4f6; padding: 1.5rem; border-radius: 0.5rem;
+          border: 1px solid #e5e7eb; margin-top: 1rem; max-height: 450px;
+          overflow-y: auto; min-height: 150px; /* Ensure it has some height */
+      }
+      #grading-results-content pre {
+          white-space: pre-wrap; word-wrap: break-word; font-size: 0.875rem;
+          line-height: 1.6; color: #374151; font-family: monospace;
+      }
+      #scoreDisplay { /* Extracted Score */
+          font-size: 1rem; font-weight: 600; background-color: #dbeafe; /* blue-100 */
+          color: #1e40af; /* blue-800 */ padding: 0.5rem 1rem; border-radius: 0.375rem;
+          display: inline-block; margin-bottom: 1rem;
+      }
+      #scoreDisplay .lucide { font-size: 1.1rem; margin-right: 0.4rem; vertical-align: text-bottom; }
+
+      #grading-errorArea { /* Error Message Box */
+         background-color: #fef2f2; border: 1px solid #fecaca; color: #b91c1c;
+         padding: 1rem 1.5rem; border-radius: 0.5rem; margin-top: 1.5rem;
+      }
+       #grading-errorArea p:first-child { font-weight: 600; margin-bottom: 0.25rem; }
+       #grading-errorArea .lucide { margin-right: 0.5rem; font-size: 1.25rem; }
+
+      /* --- Table Styling (For Projects, API Keys sections) --- */
+       table { width: 100%; border-collapse: collapse; }
+       th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
+       th { background-color: #f9fafb; font-weight: 600; color: #4b5563; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+       td { font-size: 0.875rem; color: #374151; }
+       tbody tr:hover { background-color: #f9fafb; }
+
+    </style>
+     <script>
+      tailwind.config = { theme: { extend: { fontFamily: { inter: ['Inter', 'sans-serif'], lucide: ['LucideIcons'] } } } }
+    </script>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside id="sidebar">
+        <div> <!-- Top part -->
+            <div class="flex items-center mb-6 px-2">
+                 <a href="aiiii.html" class="flex items-center text-xl font-bold text-blue-600">
+                     <span class="lucide mr-2 text-2xl"></span> GradeWise AI
+                 </a>
+            </div>
+            <nav class="space-y-1">
+                <!-- Reverted to data-section for internal toggling -->
+                <a href="#" class="sidebar-link active" data-section="grade-paper">
+                    <span class="lucide"></span> Grade Paper
+                </a>
+                <a href="#" class="sidebar-link" data-section="projects">
+                    <span class="lucide"></span> Projects
+                </a>
+                <a href="#" class="sidebar-link" data-section="api-keys">
+                    <span class="lucide"></span> API Keys
+                </a>
+                <a href="#" class="sidebar-link" data-section="contacts-classes">
+                    <span class="lucide"></span> Contacts & Classes
+                </a>
+                <a href="#" class="sidebar-link" data-section="settings">
+                    <span class="lucide"></span> Settings
+                </a>
+            </nav>
+        </div>
+         <div class="px-2 pb-2"> <!-- Bottom part -->
+              <a href="aiiii.html" class="sidebar-link text-sm">
+                  <span class="lucide"></span> Back to Main Site
+              </a>
+         </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main id="main-content">
+
+        <!-- == Section: Grade Paper (Modernized GUI) == -->
+        <section id="section-grade-paper" class="content-section">
+            <h1 class="text-3xl font-bold text-gray-900 mb-8">Grade a Paper</h1>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                <!-- Left Column: Inputs -->
+                <div>
+                    <!-- Card 1: Grading Criteria -->
+                    <div class="content-card">
+                        <h2 class="text-xl font-semibold mb-5 text-gray-800 flex items-center"><span class="lucide mr-2 text-blue-500"></span> 1. Grading Criteria</h2>
+                        <div class="border-b border-gray-200 mb-4">
+                            <button class="tab-button active" data-tab="criteria-file-tab">Upload File</button>
+                            <button class="tab-button" data-tab="criteria-text-tab">Paste Text</button>
+                        </div>
+
+                        <div id="criteria-file-tab" class="tab-content active">
+                            <label for="answerKeyFile" class="input-label sr-only">Upload Criteria File</label>
+                            <div class="file-input-area">
+                                <input type="file" id="answerKeyFile" name="answerKeyFile" accept=".pdf,.doc,.docx,.txt"/>
+                                <div class="file-input-visual">
+                                     <span class="lucide block mx-auto"></span>
+                                     <span class="file-input-browse">Click to upload</span> or drag and drop
+                                     <p class="text-xs mt-1">Answer Key/Rubric (TXT, PDF, DOCX)</p>
+                                </div>
+                            </div>
+                             <div id="answerFileName" class="file-name-display"></div>
+                        </div>
+
+                        <div id="criteria-text-tab" class="tab-content">
+                            <label for="rubricText" class="input-label">Or Paste Rubric Text Below</label>
+                            <textarea id="rubricText" name="rubricText" class="input-field bg-white" placeholder="Example: 
+Q1 (5pts): Definition accurate? Provide example.
+Q2 (10pts): Explain concept X clearly. Cite source.
+..."></textarea>
+                        </div>
+                         <p class="mt-3 text-xs text-gray-500">Tip: Provide detailed criteria for best results.</p>
+                    </div>
+
+                    <!-- Card 2: Student Submission -->
+                    <div class="content-card">
+                        <h2 class="text-xl font-semibold mb-5 text-gray-800 flex items-center"><span class="lucide mr-2 text-green-500"></span> 2. Student Submission</h2>
+                        <label for="studentPaperFile" class="input-label sr-only">Upload Student Paper</label>
+                        <div class="file-input-area">
+                            <input type="file" id="studentPaperFile" name="studentPaperFile" accept=".pdf,.doc,.docx,.txt"/>
+                            <div class="file-input-visual">
+                                 <span class="lucide block mx-auto"></span>
+                                 <span class="file-input-browse">Click to upload</span> or drag and drop
+                                 <p class="text-xs mt-1">Student Paper (TXT, PDF, DOCX)</p>
+                            </div>
+                        </div>
+                        <div id="paperFileName" class="file-name-display"></div>
+                    </div>
+
+                    <!-- Card 3: Action -->
+                    <div class="content-card text-center">
+                         <button id="gradeButton" class="btn btn-primary text-base px-8 py-3 w-full md:w-auto" disabled>
+                            <span id="gradeButtonText">Select Criteria & Paper</span>
+                            <div id="gradeButtonSpinner" class="grading-spinner hidden"></div>
+                        </button>
+                    </div>
+
+                </div><!-- End Left Column -->
+
+                <!-- Right Column: Results -->
+                <div>
+                    <!-- Card 4: Results -->
+                    <div class="content-card">
+                         <h2 class="text-xl font-semibold mb-5 text-gray-800 flex items-center"><span class="lucide mr-2 text-purple-500"></span> 3. AI Grading Results</h2>
+
+                         <!-- Error Display -->
+                        <div id="grading-errorArea" class="hidden" role="alert">
+                            <p class="flex items-center"><span class="lucide"></span> Error</p>
+                            <p id="grading-errorMessage" class="text-sm mt-1"></p>
+                        </div>
+
+                         <!-- Results Display Area -->
+                         <div id="grading-resultsArea" class="hidden">
+                             <div id="scoreDisplay" class="hidden"><span class="lucide"></span> <span id="scoreValue"></span></div>
+                             <div class="flex justify-between items-center mb-2">
+                                 <h3 class="text-md font-medium text-gray-600">Generated Feedback:</h3>
+                                 <button id="downloadButton" class="btn btn-secondary btn-sm">
+                                      <span class="lucide"></span> Download (.txt)
+                                 </button>
+                            </div>
+                             <div id="grading-results-content">
+                                <pre>AI feedback will appear here once grading is complete...</pre>
+                             </div>
+                         </div>
+
+                         <!-- Placeholder when no results yet -->
+                         <div id="resultsPlaceholder" class="text-center py-10 text-gray-500">
+                             <span class="lucide text-4xl block mx-auto mb-3"></span> <!-- Bot icon -->
+                             Results will be shown here after processing.
+                         </div>
+                    </div>
+                </div><!-- End Right Column -->
+
+            </div> <!-- End Grid -->
+        </section> <!-- End Grade Paper Section -->
+
+        <!-- == Section: Projects (Simulated - Unchanged Structure) == -->
+        <section id="section-projects" class="content-section hidden">
+            <div class="flex justify-between items-center mb-6">
+                 <h1 class="text-2xl font-bold text-gray-900">Projects</h1>
+                 <button id="addProjectBtn" class="btn btn-primary btn-sm">
+                      <span class="lucide mr-1"></span> Add Project
+                 </button>
+            </div>
+             <form id="addProjectForm" class="content-card mb-6 hidden">
+                 <h2 class="text-lg font-semibold mb-3">Add New Project</h2>
+                 <div>
+                     <label for="projectName" class="input-label">Project Name</label>
+                     <input type="text" id="projectName" class="input-field" required>
+                 </div>
+                 <div class="mt-4">
+                     <button type="submit" class="btn btn-primary btn-sm">Save Project</button>
+                     <button type="button" id="cancelAddProject" class="btn btn-secondary btn-sm ml-2">Cancel</button>
+                 </div>
+            </form>
+            <div class="content-card">
+                 <h2 class="text-lg font-semibold mb-4 text-gray-800">Your Projects</h2>
+                 <div id="projectsList" class="space-y-2">
+                     <!-- Project items rendered by JS -->
+                 </div>
+                 <p id="noProjectsMsg" class="text-gray-500 text-sm mt-4 hidden">No projects added yet.</p>
+            </div>
+        </section>
+
+        <!-- == Section: API Keys (Simulated - Unchanged Structure) == -->
+        <section id="section-api-keys" class="content-section hidden">
+             <div class="flex justify-between items-center mb-6">
+                 <h1 class="text-2xl font-bold text-gray-900">API Key Manager (BYOK)</h1>
+                 <button id="addApiKeyBtn" class="btn btn-primary btn-sm">
+                      <span class="lucide mr-1"></span> Add API Key
+                 </button>
+            </div>
+            <!-- Added Warning -->
+            <div class="p-4 mb-6 text-sm text-yellow-800 rounded-lg bg-yellow-50 border border-yellow-200" role="alert">
+              <span class="font-medium flex items-center"><span class="lucide mr-2"></span>Demo Functionality Note</span>
+               This manager is for UI demonstration only. The actual API call in this demo uses the key <strong class="font-mono mx-1">HARDCODED</strong> in the script below. Adding keys here does <strong class="uppercase">not</strong> change the key used for grading. In a real app, keys would be stored securely server-side.
+               <br><strong>🚨 SECURITY WARNING: Never expose your real API keys in client-side code! 🚨</strong>
+            </div>
+            <form id="addApiKeyForm" class="content-card mb-6 hidden">
+                 <h2 class="text-lg font-semibold mb-3">Add New API Key</h2>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     <div>
+                         <label for="apiKeyName" class="input-label">Provider / Name</label>
+                         <input type="text" id="apiKeyName" class="input-field" placeholder="e.g., Google Gemini Main" required>
+                     </div>
+                     <div>
+                         <label for="apiKeyValue" class="input-label">API Key Value</label>
+                         <input type="password" id="apiKeyValue" class="input-field" required>
+                     </div>
+                </div>
+                 <div class="mt-4">
+                     <button type="submit" class="btn btn-primary btn-sm">Save Key</button>
+                     <button type="button" id="cancelAddApiKey" class="btn btn-secondary btn-sm ml-2">Cancel</button>
+                 </div>
+            </form>
+            <div class="content-card">
+                 <h2 class="text-lg font-semibold mb-4 text-gray-800">Managed Keys</h2>
+                 <div class="overflow-x-auto">
+                     <table id="apiKeysTable" class="min-w-full">
+                         <thead>
+                             <tr><th>Provider/Name</th><th>Key (Partial)</th><th class="text-right">Action</th></tr>
+                         </thead>
+                         <tbody id="apiKeysList">
+                             <!-- Key items rendered by JS -->
+                         </tbody>
+                     </table>
+                 </div>
+                 <p id="noApiKeysMsg" class="text-gray-500 text-sm mt-4 hidden">No API keys added yet.</p>
+            </div>
+        </section>
+
+        <!-- == Section: Contacts & Classes (Simulated - Unchanged Structure) == -->
+        <section id="section-contacts-classes" class="content-section hidden">
+             <h1 class="text-2xl font-bold text-gray-900 mb-6">Contacts & Classes</h1>
+             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                 <!-- Contacts -->
+                 <div>
+                    <div class="flex justify-between items-center mb-4">
+                         <h2 class="text-xl font-semibold text-gray-800">Contacts</h2>
+                         <button id="addContactBtn" class="btn btn-primary btn-sm"><span class="lucide mr-1"></span> Add Contact</button>
+                    </div>
+                    <form id="addContactForm" class="content-card mb-4 hidden">
+                         <h3 class="text-lg font-semibold mb-3">Add New Contact</h3>
+                          <div class="mb-3">
+                             <label for="contactName" class="input-label">Name</label>
+                             <input type="text" id="contactName" class="input-field" required>
+                         </div>
+                          <div>
+                             <label for="contactEmail" class="input-label">Email</label>
+                             <input type="email" id="contactEmail" class="input-field" required>
+                         </div>
+                         <div class="mt-4">
+                             <button type="submit" class="btn btn-primary btn-sm">Save Contact</button>
+                             <button type="button" id="cancelAddContact" class="btn btn-secondary btn-sm ml-2">Cancel</button>
+                         </div>
+                    </form>
+                    <div class="content-card">
+                         <h3 class="text-lg font-semibold mb-4 text-gray-800">Contact List</h3>
+                         <div id="contactsList" class="space-y-2 max-h-60 overflow-y-auto"></div>
+                         <p id="noContactsMsg" class="text-gray-500 text-sm mt-4 hidden">No contacts added yet.</p>
+                    </div>
+                 </div>
+                  <!-- Classes -->
+                 <div>
+                      <div class="flex justify-between items-center mb-4">
+                         <h2 class="text-xl font-semibold text-gray-800">Classes</h2>
+                         <button id="createClassBtn" class="btn btn-primary btn-sm"><span class="lucide mr-1"></span> Create Class</button>
+                    </div>
+                     <form id="createClassForm" class="content-card mb-4 hidden">
+                          <h3 class="text-lg font-semibold mb-3">Create New Class</h3>
+                          <div class="mb-3">
+                             <label for="className" class="input-label">Class Name</label>
+                             <input type="text" id="className" class="input-field" required>
+                         </div>
+                          <div class="mb-3">
+                              <label class="input-label mb-1">Add Students (Select from Contacts)</label>
+                              <div id="classContactsChecklist" class="max-h-40 overflow-y-auto border rounded p-2 space-y-1 bg-gray-50"></div>
+                              <p id="noContactsForClassMsg" class="text-xs text-gray-500 mt-1 hidden">Add contacts first to select students.</p>
+                          </div>
+                         <div class="mt-4">
+                             <button type="submit" class="btn btn-primary btn-sm">Save Class</button>
+                              <button type="button" id="cancelCreateClass" class="btn btn-secondary btn-sm ml-2">Cancel</button>
+                         </div>
+                     </form>
+                     <div class="content-card">
+                         <h3 class="text-lg font-semibold mb-4 text-gray-800">Class List</h3>
+                         <div id="classesList" class="space-y-3"></div>
+                         <p id="noClassesMsg" class="text-gray-500 text-sm mt-4 hidden">No classes created yet.</p>
+                     </div>
+                 </div>
+             </div>
+        </section>
+
+        <!-- == Section: Settings (Placeholder - Unchanged Structure) == -->
+        <section id="section-settings" class="content-section hidden">
+             <h1 class="text-2xl font-bold text-gray-900 mb-6">Settings</h1>
+             <div class="content-card">
+                 <h2 class="text-lg font-semibold mb-4 text-gray-800">Application Settings (Demo)</h2>
+                 <p class="text-gray-600 mb-6">User preferences would appear here.</p>
+                 <div class="space-y-4">
+                     <div>
+                         <label for="setting-theme" class="input-label">Theme</label>
+                         <select id="setting-theme" class="input-field mt-1 w-auto">
+                             <option>System Default</option><option>Light</option><option>Dark</option>
+                         </select>
+                     </div>
+                      <label class="flex items-center cursor-pointer">
+                         <input type="checkbox" class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500 h-4 w-4">
+                         <span class="ml-2 text-sm text-gray-600">Enable Email Notifications</span>
+                     </label>
+                      <label class="flex items-center cursor-pointer">
+                         <input type="checkbox" class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500 h-4 w-4" checked>
+                         <span class="ml-2 text-sm text-gray-600">Auto-save drafts</span>
+                     </label>
+                 </div>
+             </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- Hardcoded API Key (INSECURE - For Demo Only) ---
+        // Replace with your actual key for local testing. Disable key afterwards.
+        const HARDCODED_API_KEY = "AIzaSyClI8VW8G6_RdGQuse5dAUxHtefVke1qjc";
+        // --- End Hardcoded API Key ---
+
+        // --- Simulated Data Storage (In-Memory) ---
+        let projects = [];
+        let apiKeys = [];
+        let contacts = [];
+        let classes = [];
+
+        // --- DOM Element References ---
+        const sidebarLinks = document.querySelectorAll('#sidebar .sidebar-link');
+        const contentSections = document.querySelectorAll('#main-content .content-section');
+        // -- Grading Section --
+        const gradeButton = document.getElementById('gradeButton');
+        const gradeButtonText = document.getElementById('gradeButtonText');
+        const gradeButtonSpinner = document.getElementById('gradeButtonSpinner');
+        const answerKeyFileInput = document.getElementById('answerKeyFile');
+        const rubricTextInput = document.getElementById('rubricText');
+        const studentPaperFileInput = document.getElementById('studentPaperFile');
+        const answerFileNameDiv = document.getElementById('answerFileName');
+        const paperFileNameDiv = document.getElementById('paperFileName');
+        const criteriaTabButtons = document.querySelectorAll('.tab-button');
+        const criteriaTabContents = document.querySelectorAll('.tab-content');
+        const gradingResultsArea = document.getElementById('grading-resultsArea');
+        const gradingResultsContent = document.getElementById('grading-results-content').querySelector('pre');
+        const gradingErrorArea = document.getElementById('grading-errorArea');
+        const gradingErrorMessage = document.getElementById('grading-errorMessage');
+        const downloadButton = document.getElementById('downloadButton');
+        const scoreDisplayDiv = document.getElementById('scoreDisplay');
+        const scoreValueSpan = document.getElementById('scoreValue');
+        const resultsPlaceholderDiv = document.getElementById('resultsPlaceholder');
+        // -- Project Section --
+        const addProjectBtn = document.getElementById('addProjectBtn');
+        const addProjectForm = document.getElementById('addProjectForm');
+        const cancelAddProjectBtn = document.getElementById('cancelAddProject');
+        const projectNameInput = document.getElementById('projectName');
+        const projectsListDiv = document.getElementById('projectsList');
+        const noProjectsMsg = document.getElementById('noProjectsMsg');
+        // -- API Key Section --
+        const addApiKeyBtn = document.getElementById('addApiKeyBtn');
+        const addApiKeyForm = document.getElementById('addApiKeyForm');
+        const cancelAddApiKeyBtn = document.getElementById('cancelAddApiKey');
+        const apiKeyNameInput = document.getElementById('apiKeyName');
+        const apiKeyValueInput = document.getElementById('apiKeyValue');
+        const apiKeysTableBody = document.getElementById('apiKeysList');
+        const noApiKeysMsg = document.getElementById('noApiKeysMsg');
+        // -- Contacts & Classes Section --
+        const addContactBtn = document.getElementById('addContactBtn');
+        const addContactForm = document.getElementById('addContactForm');
+        const cancelAddContactBtn = document.getElementById('cancelAddContact');
+        const contactNameInput = document.getElementById('contactName');
+        const contactEmailInput = document.getElementById('contactEmail');
+        const contactsListDiv = document.getElementById('contactsList');
+        const noContactsMsg = document.getElementById('noContactsMsg');
+        const createClassBtn = document.getElementById('createClassBtn');
+        const createClassForm = document.getElementById('createClassForm');
+        const cancelCreateClassBtn = document.getElementById('cancelCreateClass');
+        const classNameInput = document.getElementById('className');
+        const classContactsChecklistDiv = document.getElementById('classContactsChecklist');
+        const noContactsForClassMsg = document.getElementById('noContactsForClassMsg');
+        const classesListDiv = document.getElementById('classesList');
+        const noClassesMsg = document.getElementById('noClassesMsg');
+
+        // --- Initialization ---
+        function init() {
+            setupEventListeners();
+            showSection('grade-paper'); // Default section
+            renderProjects(); renderApiKeys(); renderContacts(); renderClasses(); // Initial renders
+            checkGradingFormState(); // Initial check for grade button
+            updateFileNameDisplay(answerKeyFileInput, answerFileNameDiv); // Show initial file state
+            updateFileNameDisplay(studentPaperFileInput, paperFileNameDiv);
+        }
+
+        // --- Navigation Logic (Internal Section Toggling) ---
+        function showSection(sectionId) {
+            contentSections.forEach(section => section.classList.add('hidden'));
+            const activeSection = document.getElementById(`section-${sectionId}`);
+            if (activeSection) activeSection.classList.remove('hidden');
+
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.section === sectionId) link.classList.add('active');
+            });
+            // Hide forms when switching sections (good practice)
+            [addProjectForm, addApiKeyForm, addContactForm, createClassForm].forEach(form => form?.classList.add('hidden'));
+        }
+
+        // --- UI Logic for Grading Section ---
+        function setupCriteriaTabs() {
+            criteriaTabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetTabId = button.dataset.tab;
+
+                    criteriaTabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    criteriaTabContents.forEach(content => {
+                        content.classList.toggle('active', content.id === targetTabId);
+                    });
+                    checkGradingFormState(); // Re-check button state when switching tabs
+                });
+            });
+        }
+
+        function updateFileNameDisplay(fileInput, displayDiv) {
+            if (fileInput.files.length > 0) {
+                displayDiv.textContent = `Selected: ${fileInput.files[0].name}`;
+            } else {
+                displayDiv.textContent = ''; // Clear if no file
+            }
+        }
+
+        // --- Rendering Functions (Simulated Data - Minimal Changes) ---
+        function renderProjects() { /* ... (same as your original code, but toggle noProjectsMsg) ... */
+             projectsListDiv.innerHTML = '';
+             noProjectsMsg.classList.toggle('hidden', projects.length > 0);
+             projects.forEach((project, index) => {
+                 const div = document.createElement('div');
+                 div.className = 'flex justify-between items-center p-2 border rounded hover:bg-gray-50';
+                 div.innerHTML = `
+                     <span class="text-sm font-medium text-gray-700">${escapeHtml(project.name)}</span>
+                     <button class="btn btn-danger btn-sm" data-index="${index}">Delete</button>`;
+                 div.querySelector('button').addEventListener('click', () => deleteProject(index));
+                 projectsListDiv.appendChild(div);
+             });
+        }
+        function renderApiKeys() { /* ... (same as your original code, but toggle noApiKeysMsg) ... */
+            apiKeysTableBody.innerHTML = '';
+            noApiKeysMsg.classList.toggle('hidden', apiKeys.length > 0);
+            apiKeys.forEach((keyItem, index) => {
+                 const tr = document.createElement('tr');
+                 // Added text-right for button alignment
+                 tr.innerHTML = `
+                     <td>${escapeHtml(keyItem.name)}</td>
+                     <td class="font-mono text-xs">${escapeHtml(keyItem.displayKey)}</td>
+                     <td class="text-right"><button class="btn btn-danger btn-sm" data-index="${index}">Delete</button></td>`;
+                 tr.querySelector('button').addEventListener('click', () => deleteApiKey(index));
+                 apiKeysTableBody.appendChild(tr);
+             });
+        }
+        function renderContacts() { /* ... (same as your original code, but toggle messages) ... */
+             contactsListDiv.innerHTML = ''; classContactsChecklistDiv.innerHTML = '';
+             noContactsMsg.classList.toggle('hidden', contacts.length > 0);
+             noContactsForClassMsg.classList.toggle('hidden', contacts.length > 0);
+
+             if (contacts.length === 0) return;
+
+             contacts.forEach((contact, index) => {
+                 const contactDiv = document.createElement('div');
+                 contactDiv.className = 'flex justify-between items-center p-2 border rounded hover:bg-gray-50 text-sm';
+                 contactDiv.innerHTML = `
+                     <div>
+                         <span class="font-medium text-gray-700">${escapeHtml(contact.name)}</span>
+                         <span class="text-gray-500 ml-2">(${escapeHtml(contact.email)})</span>
+                     </div>
+                     <button class="btn btn-danger btn-sm" data-index="${index}">Delete</button>`;
+                 contactDiv.querySelector('button').addEventListener('click', () => deleteContact(index));
+                 contactsListDiv.appendChild(contactDiv);
+
+                 const checklistLabel = document.createElement('label');
+                 checklistLabel.className = 'flex items-center space-x-2 text-sm cursor-pointer p-1';
+                 checklistLabel.innerHTML = `
+                     <input type="checkbox" name="classContact" value="${contact.id}" class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500 h-4 w-4">
+                     <span>${escapeHtml(contact.name)} (${escapeHtml(contact.email)})</span>`;
+                 classContactsChecklistDiv.appendChild(checklistLabel);
+             });
+        }
+        function renderClasses() { /* ... (same as your original code, but toggle noClassesMsg) ... */
+            classesListDiv.innerHTML = '';
+            noClassesMsg.classList.toggle('hidden', classes.length > 0);
+            classes.forEach((cls, index) => {
+                 const classDiv = document.createElement('div');
+                 classDiv.className = 'p-3 border rounded bg-gray-50';
+                 const studentNames = cls.contactIds.map(id => contacts.find(c => c.id === id)?.name).filter(name => name).join(', ') || 'None';
+                 classDiv.innerHTML = `
+                     <div class="flex justify-between items-center mb-1">
+                         <span class="text-md font-semibold text-gray-800">${escapeHtml(cls.name)}</span>
+                         <button class="btn btn-danger btn-sm" data-index="${index}">Delete Class</button>
+                     </div>
+                     <p class="text-xs text-gray-600">Students: ${studentNames}</p>`;
+                 classDiv.querySelector('button').addEventListener('click', () => deleteClass(index));
+                 classesListDiv.appendChild(classDiv);
+             });
+        }
+
+        // --- Add/Delete Functions (Simulated Data - Minimal Changes) ---
+        function addProject(name) { if (name) { projects.push({ id: Date.now(), name: name }); renderProjects(); } }
+        function deleteProject(index) { projects.splice(index, 1); renderProjects(); }
+        function addApiKey(name, key) { /* ... (same as before) ... */
+            if (name && key) { const displayKey = key.length > 8 ? `${key.substring(0, 4)}...${key.substring(key.length - 3)}` : key; apiKeys.push({ id: Date.now(), name: name, key: key, displayKey: displayKey }); renderApiKeys(); }
+        }
+        function deleteApiKey(index) { apiKeys.splice(index, 1); renderApiKeys(); }
+        function addContact(name, email) { if (name && email) { contacts.push({ id: Date.now(), name: name, email: email }); renderContacts(); } }
+        function deleteContact(index) { /* ... (same as before, including removing from classes) ... */
+            const deletedContactId = contacts[index]?.id; contacts.splice(index, 1);
+            classes = classes.map(cls => ({ ...cls, contactIds: cls.contactIds.filter(id => id !== deletedContactId) }));
+            renderContacts(); renderClasses();
+        }
+        function addClass(name, contactIds) { if (name && contactIds) { classes.push({ id: Date.now(), name: name, contactIds: contactIds }); renderClasses(); } }
+        function deleteClass(index) { classes.splice(index, 1); renderClasses(); }
+
+
+        // --- Grading Logic (Adapted for New UI) ---
+        function checkGradingFormState() {
+             const criteriaFileSelected = answerKeyFileInput.files.length > 0;
+             const criteriaTextEntered = rubricTextInput.value.trim().length > 0;
+             const criteriaFileTabActive = document.getElementById('criteria-file-tab').classList.contains('active');
+             const criteriaTextTabActive = document.getElementById('criteria-text-tab').classList.contains('active');
+
+             const criteriaProvided = (criteriaFileTabActive && criteriaFileSelected) || (criteriaTextTabActive && criteriaTextEntered);
+             const studentPaperSelected = studentPaperFileInput.files.length > 0;
+
+             if (criteriaProvided && studentPaperSelected) {
+                 gradeButton.disabled = false;
+                 gradeButtonText.textContent = 'Grade Paper Now';
+             } else {
+                 gradeButton.disabled = true;
+                 let message = "Grade Paper";
+                 if (!criteriaProvided && !studentPaperSelected) message = "Select Criteria & Paper";
+                 else if (!criteriaProvided) message = "Select Grading Criteria";
+                 else message = "Select Student Paper";
+                 gradeButtonText.textContent = message;
+             }
+        }
+
+         function readFileAsText(file) { /* ... (same as before) ... */
+             return new Promise((resolve, reject) => {
+                 if (!file) { resolve(""); return; }
+                 const reader = new FileReader();
+                 reader.onload = (event) => resolve(event.target.result);
+                 reader.onerror = (error) => reject(new Error(`Failed to read file: ${file.name}. Error: ${reader.error}`));
+                 reader.readAsText(file);
+             });
+         }
+
+        function downloadResults() { /* ... (same as before) ... */
+            const textToSave = gradingResultsContent.innerText; if (!textToSave || textToSave.includes("AI feedback will appear here")) { alert("No results to download."); return; }
+            const blob = new Blob([textToSave], { type: 'text/plain' }); const url = URL.createObjectURL(blob);
+            const anchor = document.createElement('a'); anchor.href = url; anchor.download = 'gradewise_ai_results.txt'; document.body.appendChild(anchor); anchor.click(); document.body.removeChild(anchor); URL.revokeObjectURL(url);
+         }
+
+         // Function to attempt extracting score (example)
+         function extractAndDisplayScore(text) {
+             // Simple regex: looks for "Score: XX/YY" or "Score: XX"
+             const scoreMatch = text.match(/Score:\s*([\d\.]+)\s*(\/\s*[\d\.]+)?/i);
+             if (scoreMatch && scoreMatch[1]) {
+                 scoreValueSpan.textContent = scoreMatch[0]; // Display full "Score: XX/YY"
+                 scoreDisplayDiv.classList.remove('hidden');
+                 return true; // Score found
+             } else {
+                 scoreDisplayDiv.classList.add('hidden');
+                 return false; // Score not found
+             }
+         }
+
+         async function handleGradeButtonClick() {
+             // --- UI Reset ---
+             gradeButton.disabled = true; gradeButtonText.textContent = 'Grading...';
+             gradeButtonSpinner.classList.remove('hidden');
+             gradingResultsArea.classList.add('hidden'); gradingErrorArea.classList.add('hidden');
+             resultsPlaceholderDiv.classList.remove('hidden'); // Show placeholder during grading
+             gradingResultsContent.textContent = 'Processing...'; gradingErrorMessage.textContent = '';
+             scoreDisplayDiv.classList.add('hidden'); // Hide score initially
+
+             // --- Get Inputs based on active tab ---
+            let criteriaPromise;
+            const criteriaFile = answerKeyFileInput.files[0];
+            const criteriaText = rubricTextInput.value.trim();
+            const studentPaperFile = studentPaperFileInput.files[0];
+
+            const criteriaFileTabActive = document.getElementById('criteria-file-tab').classList.contains('active');
+
+            if (criteriaFileTabActive && criteriaFile) {
+                criteriaPromise = readFileAsText(criteriaFile);
+            } else if (!criteriaFileTabActive && criteriaText) {
+                criteriaPromise = Promise.resolve(criteriaText); // Resolve directly with text
+            } else {
+                criteriaPromise = Promise.reject(new Error("No valid criteria selected (check active tab and input)."));
+            }
+
+            try {
+                const [criteriaContent, studentPaperContent] = await Promise.all([
+                    criteriaPromise,
+                    readFileAsText(studentPaperFile)
+                ]);
+
+                if (!criteriaContent) throw new Error("Grading criteria content is missing or couldn't be read.");
+                if (!studentPaperContent) throw new Error(`Could not read content from student paper '${studentPaperFile?.name || 'file'}'.`);
+
+                // --- Construct Prompt (Same as before) ---
+                const prompt = `TASK: Evaluate the following student paper based *strictly* on the provided grading criteria. GRADING CRITERIA:\n\`\`\`\n${criteriaContent}\n\`\`\`\n\nSTUDENT PAPER:\n\`\`\`\n${studentPaperContent}\n\`\`\`\n\nINSTRUCTIONS:\n1. Analyze against *each point* in criteria.\n2. Provide specific feedback referencing student text & criteria.\n3. Suggest a numerical score (e.g., "Score: XX/100" or similar format) on its own line first.\n4. Structure output clearly with "Score:" line followed by "Feedback:" section.\n\nOUTPUT:\nScore: [Score / Total points]\nFeedback:\n[Detailed feedback]`;
+
+                // --- Call API (Using Hardcoded Key) ---
+                const API_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${HARDCODED_API_KEY}`;
+                console.log("Sending request to Gemini API...");
+
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+
+                 if (!response.ok) { /* ... (same error handling) ... */
+                     let errorBody = `API Error: ${response.status} ${response.statusText}`; try { const ej = await response.json(); errorBody = ej?.error?.message || JSON.stringify(ej); } catch(e){} throw new Error(errorBody);
+                 }
+                 const data = await response.json();
+                 const generatedText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                 if (!generatedText) throw new Error("API response missing generated text.");
+
+                // --- Process & Display Results ---
+                resultsPlaceholderDiv.classList.add('hidden'); // Hide placeholder
+                gradingResultsContent.textContent = generatedText; // Display full text
+                extractAndDisplayScore(generatedText); // Try to show score separately
+                gradingResultsArea.classList.remove('hidden'); // Show results area
+
+            } catch (error) {
+                console.error("Grading Error:", error);
+                resultsPlaceholderDiv.classList.add('hidden'); // Hide placeholder on error too
+                gradingErrorMessage.textContent = `${error.message}`;
+                gradingErrorArea.classList.remove('hidden');
+            } finally {
+                // --- Restore Button State ---
+                gradeButtonSpinner.classList.add('hidden');
+                checkGradingFormState(); // Re-evaluates button text and disabled state
+                console.log("Grading process finished.");
+            }
+         }
+
+        // --- Utility ---
+        function escapeHtml(unsafe) { /* ... (same as before) ... */
+            if (!unsafe) return ''; return unsafe.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">").replace(/"/g, """").replace(/'/g, "'");
+         }
+
+        // --- Event Listeners Setup ---
+        function setupEventListeners() {
+            // Sidebar Navigation
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', (e) => { e.preventDefault(); showSection(e.currentTarget.dataset.section); });
+            });
+             // Grading Section Specific Listeners
+             setupCriteriaTabs(); // Initialize tab logic
+            answerKeyFileInput.addEventListener('change', () => { updateFileNameDisplay(answerKeyFileInput, answerFileNameDiv); checkGradingFormState(); });
+            rubricTextInput.addEventListener('input', checkGradingFormState);
+            studentPaperFileInput.addEventListener('change', () => { updateFileNameDisplay(studentPaperFileInput, paperFileNameDiv); checkGradingFormState(); });
+            gradeButton.addEventListener('click', handleGradeButtonClick);
+            downloadButton.addEventListener('click', downloadResults);
+            // Project Section Listeners
+             addProjectBtn.addEventListener('click', () => addProjectForm.classList.remove('hidden'));
+             cancelAddProjectBtn.addEventListener('click', () => addProjectForm.classList.add('hidden'));
+             addProjectForm.addEventListener('submit', (e) => { e.preventDefault(); addProject(projectNameInput.value.trim()); projectNameInput.value = ''; addProjectForm.classList.add('hidden'); });
+             // API Key Section Listeners
+             addApiKeyBtn.addEventListener('click', () => addApiKeyForm.classList.remove('hidden'));
+             cancelAddApiKeyBtn.addEventListener('click', () => addApiKeyForm.classList.add('hidden'));
+             addApiKeyForm.addEventListener('submit', (e) => { e.preventDefault(); addApiKey(apiKeyNameInput.value.trim(), apiKeyValueInput.value.trim()); apiKeyNameInput.value = ''; apiKeyValueInput.value = ''; addApiKeyForm.classList.add('hidden'); });
+             // Contact Section Listeners
+             addContactBtn.addEventListener('click', () => addContactForm.classList.remove('hidden'));
+             cancelAddContactBtn.addEventListener('click', () => addContactForm.classList.add('hidden'));
+             addContactForm.addEventListener('submit', (e) => { e.preventDefault(); addContact(contactNameInput.value.trim(), contactEmailInput.value.trim()); contactNameInput.value = ''; contactEmailInput.value = ''; addContactForm.classList.add('hidden'); });
+             // Class Section Listeners
+             createClassBtn.addEventListener('click', () => { renderContacts(); createClassForm.classList.remove('hidden'); }); // Re-render contacts for checklist
+             cancelCreateClassBtn.addEventListener('click', () => createClassForm.classList.add('hidden'));
+             createClassForm.addEventListener('submit', (e) => { e.preventDefault(); const name = classNameInput.value.trim(); const ids = Array.from(classContactsChecklistDiv.querySelectorAll('input:checked')).map(cb => parseInt(cb.value)); addClass(name, ids); classNameInput.value = ''; createClassForm.classList.add('hidden'); });
+        }
+
+        // --- Run Initialization ---
+        document.addEventListener('DOMContentLoaded', init);
+
+    </script>
+
+</body>
+</html>

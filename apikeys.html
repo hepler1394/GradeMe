@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Keys - GradeWise AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      @font-face { font-family: 'LucideIcons'; src: url('https://unpkg.com/lucide-static@latest/font/lucide.ttf') format('truetype'); }
+      .lucide { font-family: 'LucideIcons'; font-size: 1.25rem; line-height: 1; display: inline-block; vertical-align: middle; }
+      body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1f2937; }
+      .hidden { display: none; }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #e5e7eb; vertical-align: middle; }
+      th { background-color: #f9fafb; font-weight: 600; color: #4b5563; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+      td { font-size: 0.875rem; color: #374151; }
+      tbody tr:hover { background-color: #f3f4f6; }
+      .action-link { color: #ef4444; font-weight: 500; text-decoration: none; } /* Red for delete */
+      .action-link:hover { color: #dc2626; text-decoration: underline; }
+       .key-snippet { font-family: monospace; background-color: #f3f4f6; padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.8rem; }
+    </style>
+    <script>
+      tailwind.config = { theme: { extend: { fontFamily: { inter: ['Inter', 'sans-serif'], lucide: ['LucideIcons'] } } } }
+    </script>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Navigation Bar (Logged In State - assuming API keys are part of account) -->
+     <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                 <div class="flex items-center">
+                    <a href="aiiii.html" class="flex-shrink-0 flex items-center text-xl font-bold text-blue-600 hover:text-blue-700">
+                        <span class="lucide mr-2"></span> GradeWise AI
+                    </a>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:space-x-8 items-center">
+                    <a href="dashboard.html" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Dashboard</a>
+                    <a href="gradewise_demo_detailed.html" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Grade Paper</a>
+                    <a href="projects.html" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Projects</a>
+                    <!-- Highlight Account since API keys are often managed there -->
+                    <a href="accounts.html" class="inline-flex items-center px-1 pt-1 border-b-2 border-blue-500 text-sm font-medium text-gray-900" aria-current="page">Account</a>
+                    <a href="login.html" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200">Log Out</a>
+                </div>
+                 <div class="-mr-2 flex items-center sm:hidden">
+                     <button type="button" id="mobile-menu-button" class="bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-controls="mobile-menu" aria-expanded="false">
+                         <span class="sr-only">Open main menu</span>
+                         <span class="lucide block h-6 w-6 menu-icon-open"></span>
+                         <span class="lucide hidden h-6 w-6 menu-icon-close"></span>
+                     </button>
+                 </div>
+            </div>
+        </div>
+         <div class="sm:hidden hidden" id="mobile-menu">
+             <div class="pt-2 pb-3 space-y-1">
+                <a href="dashboard.html" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Dashboard</a>
+                <a href="gradewise_demo_detailed.html" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Grade Paper</a>
+                <a href="projects.html" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Projects</a>
+                <a href="accounts.html" class="block pl-3 pr-4 py-2 border-l-4 border-blue-500 bg-blue-50 text-base font-medium text-blue-700" aria-current="page">Account</a>
+                <a href="login.html" class="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Log Out</a>
+             </div>
+         </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+             <div>
+                <h1 class="text-3xl font-bold text-gray-900">Manage API Keys</h1>
+                <p class="text-md text-gray-600 mt-1">Connect your own AI provider accounts (BYOK - Bring Your Own Key).</p>
+             </div>
+             <div>
+                 <button type="button" id="addApiKeyBtn" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                     <span class="lucide mr-2 -ml-1 h-5 w-5"></span> Add New API Key
+                 </button>
+             </div>
+         </div>
+
+          <!-- Security Warning -->
+         <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-r-md">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                     <span class="lucide h-5 w-5 text-yellow-400"></span> <!-- AlertTriangle -->
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-yellow-700">
+                        <span class="font-bold">Handle API Keys Securely.</span> Never share your API keys. We encrypt keys at rest, but always follow your provider's best practices for key management and security. Delete keys if they are no longer needed or might be compromised.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add API Key Form (Hidden Initially) -->
+         <div id="addApiKeyFormContainer" class="hidden bg-white p-6 rounded-lg shadow mb-6 border border-gray-200">
+             <h2 class="text-xl font-semibold text-gray-800 mb-4">Add New API Key</h2>
+             <form id="addApiKeyForm" class="space-y-4">
+                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="md:col-span-1">
+                         <label for="apiKeyProvider" class="block text-sm font-medium text-gray-700 mb-1">AI Provider</label>
+                         <select id="apiKeyProvider" name="apiKeyProvider" required
+                                 class="block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                             <option value="">Select Provider...</option>
+                             <option value="Google Gemini">Google Gemini</option>
+                             <option value="OpenAI">OpenAI (ChatGPT)</option>
+                             <option value="Anthropic">Anthropic (Claude)</option>
+                             <option value="Other">Other</option>
+                         </select>
+                    </div>
+                    <div class="md:col-span-2">
+                         <label for="apiKeyName" class="block text-sm font-medium text-gray-700 mb-1">Key Name / Label</label>
+                         <input type="text" id="apiKeyName" name="apiKeyName" required
+                                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                placeholder="e.g., Personal Gemini Key">
+                     </div>
+                 </div>
+                 <div>
+                     <label for="apiKeyValue" class="block text-sm font-medium text-gray-700 mb-1">API Key Value</label>
+                     <input type="password" id="apiKeyValue" name="apiKeyValue" required autocomplete="off"
+                            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm font-mono"
+                            placeholder="Paste your API key here">
+                 </div>
+                 <div class="flex justify-end gap-3 pt-2">
+                      <button type="button" id="cancelAddApiKeyBtn" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                         Cancel
+                     </button>
+                     <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                         Save API Key
+                     </button>
+                 </div>
+             </form>
+         </div>
+
+        <!-- API Keys Table -->
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+             <div class="overflow-x-auto">
+                 <table>
+                    <thead>
+                        <tr>
+                            <th>Provider</th>
+                            <th>Key Name</th>
+                            <th>Key Snippet</th>
+                            <th>Date Added</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="apiKeysTableBody">
+                        <!-- Example Row 1 -->
+                        <tr>
+                            <td class="font-medium text-gray-900">Google Gemini</td>
+                            <td class="text-gray-700">Personal Gemini Key</td>
+                            <td><span class="key-snippet">AIza...qjc</span></td>
+                            <td class="text-gray-500">2024-03-01</td>
+                            <td><a href="#" class="action-link">Delete</a></td>
+                        </tr>
+                         <!-- Example Row 2 -->
+                         <tr>
+                            <td class="font-medium text-gray-900">OpenAI</td>
+                            <td class="text-gray-700">Department Key</td>
+                            <td><span class="key-snippet">sk-...H7b</span></td>
+                            <td class="text-gray-500">2024-02-20</td>
+                             <td><a href="#" class="action-link">Delete</a></td>
+                        </tr>
+                        <!-- Add more rows dynamically or statically -->
+                         <tr id="noApiKeysRow" class="hidden">
+                              <td colspan="5" class="text-center text-gray-500 py-6">No API keys added yet. Add a key to use your own AI provider account.</td>
+                         </tr>
+                    </tbody>
+                </table>
+             </div>
+        </div>
+        <p class="text-xs text-gray-500 mt-4">Note: Adding an API key here allows GradeWise AI to use your provider account for grading, potentially incurring costs on your provider bill. GradeWise AI does not charge extra for using your own key.</p>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-auto">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
+            © 2024 GradeWise AI. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Basic Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-button');
+        const menu = document.getElementById('mobile-menu');
+        const iconOpen = btn.querySelector('.menu-icon-open');
+        const iconClose = btn.querySelector('.menu-icon-close');
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+            iconOpen.classList.toggle('hidden');
+            iconClose.classList.toggle('hidden');
+            btn.setAttribute('aria-expanded', menu.classList.contains('hidden') ? 'false' : 'true');
+        });
+
+        // Simulate showing/hiding the add API key form
+        const addBtn = document.getElementById('addApiKeyBtn');
+        const cancelBtn = document.getElementById('cancelAddApiKeyBtn');
+        const formContainer = document.getElementById('addApiKeyFormContainer');
+        const addForm = document.getElementById('addApiKeyForm');
+
+         addBtn.addEventListener('click', () => {
+             formContainer.classList.remove('hidden');
+         });
+         cancelBtn.addEventListener('click', () => {
+             formContainer.classList.add('hidden');
+             addForm.reset();
+         });
+         addForm.addEventListener('submit', (e) => {
+             e.preventDefault();
+             alert('Simulating API Key save! (No data saved, key not stored securely in this demo)');
+             formContainer.classList.add('hidden');
+             addForm.reset();
+             // In a real app, you would securely send this to the backend
+         });
+
+         // Simulate showing no keys row (example)
+         const apiKeysTableBody = document.getElementById('apiKeysTableBody');
+         const noApiKeysRow = document.getElementById('noApiKeysRow');
+         function checkKeysTableEmpty() {
+              if (apiKeysTableBody.children.length <= 1 && apiKeysTableBody.querySelector('#noApiKeysRow')) {
+                 noApiKeysRow.classList.remove('hidden');
+              } else if (apiKeysTableBody.children.length === 0) {
+                   noApiKeysRow.classList.remove('hidden');
+              } else {
+                 noApiKeysRow.classList.add('hidden');
+              }
+         }
+         // checkKeysTableEmpty(); // Call on load if needed
+    </script>
+
+</body>
+</html>

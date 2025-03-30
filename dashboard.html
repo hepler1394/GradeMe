@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - GradeWise AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      @font-face { font-family: 'LucideIcons'; src: url('https://unpkg.com/lucide-static@latest/font/lucide.ttf') format('truetype'); }
+      .lucide { font-family: 'LucideIcons'; font-size: 1.25rem; line-height: 1; display: inline-block; vertical-align: middle; }
+      body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1f2937; }
+      .hidden { display: none; }
+       .stat-card { background-color: white; border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+       .stat-card .lucide { color: #6b7280; } /* gray-500 */
+    </style>
+    <script>
+      tailwind.config = { theme: { extend: { fontFamily: { inter: ['Inter', 'sans-serif'], lucide: ['LucideIcons'] } } } }
+    </script>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Navigation Bar (Logged In State) -->
+     <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="aiiii.html" class="flex-shrink-0 flex items-center text-xl font-bold text-blue-600 hover:text-blue-700">
+                        <span class="lucide mr-2"></span> GradeWise AI
+                    </a>
+                </div>
+                 <!-- Logged In Desktop Links -->
+                 <div class="hidden sm:ml-6 sm:flex sm:space-x-8 items-center">
+                    <a href="dashboard.html" class="inline-flex items-center px-1 pt-1 border-b-2 border-blue-500 text-sm font-medium text-gray-900" aria-current="page">Dashboard</a>
+                    <!-- Link to the demo page for grading -->
+                    <a href="gradewise_demo.html" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Grade Paper</a>
+                    <a href="projects.html" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Projects</a>
+                    <a href="accounts.html" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Account</a>
+                    <!-- Logout Button (Simulated - links back to login) -->
+                    <a href="login.html" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200">Log Out</a>
+                </div>
+                 <!-- Mobile Menu Button -->
+                 <div class="-mr-2 flex items-center sm:hidden">
+                     <button type="button" id="mobile-menu-button" class="bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-controls="mobile-menu" aria-expanded="false">
+                         <span class="sr-only">Open main menu</span>
+                         <span class="lucide block h-6 w-6 menu-icon-open"></span>
+                         <span class="lucide hidden h-6 w-6 menu-icon-close"></span>
+                     </button>
+                 </div>
+            </div>
+        </div>
+         <!-- Mobile Menu (Logged In) -->
+        <div class="sm:hidden hidden" id="mobile-menu">
+             <div class="pt-2 pb-3 space-y-1">
+                <a href="dashboard.html" class="block pl-3 pr-4 py-2 border-l-4 border-blue-500 bg-blue-50 text-base font-medium text-blue-700" aria-current="page">Dashboard</a>
+                <a href="gradewise_demo.html" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Grade Paper</a>
+                <a href="projects.html" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Projects</a>
+                <a href="accounts.html" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Account</a>
+                <a href="login.html" class="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Log Out</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Welcome back, Educator!</h1>
+            <p class="text-lg text-gray-600 mt-1">Here's a quick overview of your grading activity.</p>
+        </div>
+
+        <!-- Quick Actions -->
+         <div class="mb-8 flex flex-wrap gap-4">
+             <a href="gradewise_demo.html" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                 <span class="lucide mr-2 -ml-1 h-5 w-5"></span> Grade Single Paper
+             </a>
+             <a href="projects.html#create" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                 <span class="lucide mr-2 -ml-1 h-5 w-5"></span> Create New Project
+             </a>
+              <a href="accounts.html" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                 <span class="lucide mr-2 -ml-1 h-5 w-5"></span> Manage Account
+             </a>
+         </div>
+
+
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+            <!-- Stat Card 1 -->
+            <div class="stat-card overflow-hidden">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <span class="lucide text-3xl text-blue-500"></span> <!-- Files Icon -->
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Papers Graded (This Month)</dt>
+                            <dd class="flex items-baseline">
+                                <div class="text-2xl font-semibold text-gray-900">42</div>
+                                <div class="ml-2 text-sm font-medium text-gray-500">/ 150 limit</div> <!-- Example Limit -->
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <!-- Stat Card 2 -->
+             <div class="stat-card overflow-hidden">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <span class="lucide text-3xl text-green-500"></span> <!-- Folder Icon -->
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Active Projects</dt>
+                            <dd><div class="text-2xl font-semibold text-gray-900">5</div></dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+             <!-- Stat Card 3 -->
+             <div class="stat-card overflow-hidden">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                         <span class="lucide text-3xl text-purple-500"></span> <!-- Star Icon -->
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Current Plan</dt>
+                            <dd>
+                                <div class="text-2xl font-semibold text-gray-900">Starter</div>
+                                <a href="plans.html" class="text-sm font-medium text-blue-600 hover:text-blue-500">View Plans</a>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity / Papers -->
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div class="px-4 py-5 sm:px-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Recent Activity</h3>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">Latest papers graded or projects updated.</p>
+            </div>
+            <div class="border-t border-gray-200">
+                <ul role="list" class="divide-y divide-gray-200">
+                    <li class="px-4 py-4 sm:px-6 hover:bg-gray-50 transition duration-150 ease-in-out">
+                        <div class="flex items-center justify-between">
+                            <p class="text-sm font-medium text-blue-600 truncate">History Essay - J. Doe</p>
+                            <div class="ml-2 flex-shrink-0 flex">
+                                <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Graded</p>
+                            </div>
+                        </div>
+                        <div class="mt-2 sm:flex sm:justify-between">
+                            <div class="sm:flex">
+                                <p class="flex items-center text-sm text-gray-500"><span class="lucide mr-1.5 h-4 w-4 text-gray-400"></span> Score: 88/100</p>
+                                <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6"><span class="lucide mr-1.5 h-4 w-4 text-gray-400"></span> Project: Midterm Essays</p>
+                            </div>
+                            <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                                <span class="lucide mr-1.5 h-4 w-4 text-gray-400"></span> Graded 2 hours ago
+                            </div>
+                        </div>
+                    </li>
+                     <li class="px-4 py-4 sm:px-6 hover:bg-gray-50 transition duration-150 ease-in-out">
+                        <div class="flex items-center justify-between">
+                            <p class="text-sm font-medium text-blue-600 truncate">Lab Report - A. Smith</p>
+                            <div class="ml-2 flex-shrink-0 flex">
+                                 <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Graded</p>
+                            </div>
+                        </div>
+                         <div class="mt-2 sm:flex sm:justify-between">
+                             <div class="sm:flex">
+                                <p class="flex items-center text-sm text-gray-500"><span class="lucide mr-1.5 h-4 w-4 text-gray-400"></span> Score: 95/100</p>
+                                <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6"><span class="lucide mr-1.5 h-4 w-4 text-gray-400"></span> Project: Lab Reports Q1</p>
+                            </div>
+                            <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                                <span class="lucide mr-1.5 h-4 w-4 text-gray-400"></span> Graded yesterday
+                            </div>
+                        </div>
+                    </li>
+                     <li class="px-4 py-4 sm:px-6 hover:bg-gray-50 transition duration-150 ease-in-out">
+                        <div class="flex items-center justify-between">
+                            <p class="text-sm font-medium text-gray-700 truncate">Project "Final Presentations" updated</p>
+                            <div class="ml-2 flex-shrink-0 flex">
+                                <!-- Action type could vary -->
+                            </div>
+                        </div>
+                         <div class="mt-2 sm:flex sm:justify-between">
+                             <div class="sm:flex">
+                                 <p class="flex items-center text-sm text-gray-500"><span class="lucide mr-1.5 h-4 w-4 text-gray-400"></span> View Project</p>
+                            </div>
+                            <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                                <span class="lucide mr-1.5 h-4 w-4 text-gray-400"></span> Updated 3 days ago
+                            </div>
+                        </div>
+                    </li>
+                    <!-- Add more list items as needed -->
+                </ul>
+                 <div class="px-4 py-4 sm:px-6 border-t border-gray-200 text-center">
+                     <a href="projects.html" class="text-sm font-medium text-blue-600 hover:text-blue-500">View all activity <span aria-hidden="true">→</span></a>
+                 </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-auto">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
+            © 2024 GradeWise AI. All rights reserved.
+        </div>
+    </footer>
+
+     <script>
+        // Basic Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-button');
+        const menu = document.getElementById('mobile-menu');
+        const iconOpen = btn.querySelector('.menu-icon-open');
+        const iconClose = btn.querySelector('.menu-icon-close');
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+            iconOpen.classList.toggle('hidden');
+            iconClose.classList.toggle('hidden');
+            btn.setAttribute('aria-expanded', menu.classList.contains('hidden') ? 'false' : 'true');
+        });
+    </script>
+
+</body>
+</html>

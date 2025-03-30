@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GradeWise AI - Pricing Plans</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      @font-face {
+        font-family: 'LucideIcons';
+        /* Use a reliable CDN or host the font yourself */
+        src: url('https://unpkg.com/lucide-static@latest/font/lucide.ttf') format('truetype');
+      }
+      .lucide {
+        font-family: 'LucideIcons';
+        font-size: 1.25rem; /* Adjust size as needed */
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        font-style: normal;
+        font-variant: normal;
+        text-rendering: auto;
+        display: inline-block; /* Ensure it behaves like an icon */
+        vertical-align: middle; /* Align nicely with text */
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8fafc; /* gray-50 */
+        color: #1f2937; /* gray-800 */
+      }
+       /* Helper class to hide elements (ensure it's defined if needed) */
+      .hidden { display: none; }
+    </style>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              inter: ['Inter', 'sans-serif'],
+              lucide: ['LucideIcons']
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="text-gray-800">
+
+    <!-- Navigation Bar (Copied from aiiii.html - showing logged-out state) -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <!-- Link back to the main landing page -->
+                    <a href="aiiii.html" class="flex-shrink-0 flex items-center text-xl font-bold text-blue-600">
+                         <!-- Using a generic graduation cap or similar icon code -->
+                        <span class="lucide mr-2"></span> GradeWise AI
+                    </a>
+                </div>
+                <!-- Logged Out Desktop Links -->
+                <div class="hidden sm:ml-6 sm:flex sm:space-x-8 items-center" id="nav-links-logged-out">
+                     <!-- Link to Features section on main page -->
+                    <a href="aiiii.html#features" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Features</a>
+                     <!-- Current Page - maybe highlight it -->
+                    <a href="plans.html" class="inline-flex items-center px-1 pt-1 border-b-2 border-blue-500 text-sm font-medium text-gray-900" aria-current="page">Plans</a>
+                    <!-- Links to Login/Signup (handled by JS in full app, here just placeholders) -->
+                    <a href="#" data-page="login-page" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200">Log In</a>
+                    <a href="#" data-page="signup-page" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">Sign Up Free</a>
+                </div>
+                 <!-- Logged In Links would be hidden here -->
+                 <!-- <div class="hidden sm:ml-6 sm:flex sm:space-x-8 items-center" id="nav-links-logged-in"> ... </div> -->
+
+                <!-- Mobile Menu Button -->
+                <div class="-mr-2 flex items-center sm:hidden">
+                    <button type="button" id="mobile-menu-button" class="bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <!-- Menu Icon -->
+                        <span class="lucide block h-6 w-6"></span>
+                        <!-- Close Icon (hidden initially) -->
+                        <span class="lucide hidden h-6 w-6"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Logged Out State) -->
+        <div class="sm:hidden hidden" id="mobile-menu">
+            <div class="pt-2 pb-3 space-y-1" id="mobile-nav-links-logged-out">
+                <a href="aiiii.html#features" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">Features</a>
+                <a href="plans.html" class="block pl-3 pr-4 py-2 border-l-4 border-blue-500 bg-blue-50 text-base font-medium text-blue-700" aria-current="page">Plans</a>
+                <a href="#" data-page="login-page" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">Log In</a>
+                <a href="#" data-page="signup-page" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">Sign Up Free</a>
+            </div>
+             <!-- Mobile Logged In Links would be hidden -->
+             <!-- <div class="pt-2 pb-3 space-y-1 hidden" id="mobile-nav-links-logged-in"> ... </div> -->
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+        <div class="text-center">
+            <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+                Find the Plan That's Right for You
+            </h1>
+            <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
+                Simple, transparent pricing to streamline your grading workflow.
+            </p>
+        </div>
+
+        <!-- Pricing Grid -->
+        <div class="mt-12 space-y-8 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-8">
+
+            <!-- Free Plan Card -->
+            <div class="bg-white border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200 flex flex-col">
+                <div class="p-6">
+                    <h2 class="text-lg leading-6 font-medium text-gray-900">Free</h2>
+                    <p class="mt-2 text-sm text-gray-500">Perfect for trying out GradeWise AI.</p>
+                    <p class="mt-4">
+                        <span class="text-4xl font-bold text-gray-900">$0</span>
+                        <span class="text-base font-medium text-gray-500">/month</span>
+                    </p>
+                     <!-- Link to Signup (handled by JS in full app) -->
+                    <a href="#" data-page="signup-page" class="mt-6 block w-full bg-gray-800 border border-transparent rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-gray-900">Sign up for Free</a>
+                </div>
+                <div class="pt-6 pb-8 px-6 flex-grow">
+                    <h3 class="text-xs font-semibold text-gray-900 tracking-wide uppercase">What's included</h3>
+                    <ul role="list" class="mt-4 space-y-3">
+                        <li class="flex space-x-3">
+                             <!-- Check Icon -->
+                            <span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span>
+                            <span class="text-sm text-gray-500">Up to 10 papers / month</span>
+                        </li>
+                        <li class="flex space-x-3">
+                            <span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span>
+                            <span class="text-sm text-gray-500">Single paper grading</span>
+                        </li>
+                        <li class="flex space-x-3">
+                            <span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span>
+                            <span class="text-sm text-gray-500">AI suggestions & feedback</span>
+                        </li>
+                        <li class="flex space-x-3">
+                            <span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span>
+                            <span class="text-sm text-gray-500">Use your own API Key (BYOK)</span>
+                        </li>
+                         <li class="flex space-x-3">
+                            <span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span>
+                            <span class="text-sm text-gray-500">Download individual graded papers</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Starter Plan Card (Highlighted) -->
+            <div class="bg-white border-2 border-blue-600 rounded-lg shadow-lg divide-y divide-gray-200 flex flex-col relative">
+                 <div class="absolute top-0 right-0 mr-4 -mt-3">
+                    <span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                        Most Popular
+                    </span>
+                 </div>
+                <div class="p-6">
+                    <h2 class="text-lg leading-6 font-medium text-gray-900">Starter</h2>
+                    <p class="mt-2 text-sm text-gray-500">Ideal for individual educators.</p>
+                    <p class="mt-4">
+                        <span class="text-4xl font-bold text-gray-900">$19</span>
+                        <span class="text-base font-medium text-gray-500">/month</span>
+                    </p>
+                    <a href="#" data-page="signup-page" data-plan="starter" class="mt-6 block w-full bg-blue-600 border border-transparent rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-blue-700">Get Started</a>
+                </div>
+                <div class="pt-6 pb-8 px-6 flex-grow">
+                    <h3 class="text-xs font-semibold text-gray-900 tracking-wide uppercase">Everything in Free, plus:</h3>
+                    <ul role="list" class="mt-4 space-y-3">
+                         <li class="flex space-x-3">
+                            <span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span>
+                            <span class="text-sm text-gray-500">Up to 500 papers / month</span>
+                        </li>
+                        <li class="flex space-x-3">
+                            <span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span>
+                            <span class="text-sm text-gray-500">Basic Batch Grading (up to 30 at once)</span>
+                        </li>
+                         <li class="flex space-x-3">
+                            <span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span>
+                            <span class="text-sm text-gray-500">Save common rubrics</span>
+                        </li>
+                        <li class="flex space-x-3">
+                            <span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span>
+                            <span class="text-sm text-gray-500">Standard email support</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Pro Plan Card -->
+            <div class="bg-white border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200 flex flex-col">
+                <div class="p-6">
+                    <h2 class="text-lg leading-6 font-medium text-gray-900">Pro</h2>
+                    <p class="mt-2 text-sm text-gray-500">For heavy users and departments.</p>
+                    <p class="mt-4">
+                        <span class="text-4xl font-bold text-gray-900">$49</span>
+                        <span class="text-base font-medium text-gray-500">/month</span>
+                    </p>
+                    <a href="#" data-page="signup-page" data-plan="pro" class="mt-6 block w-full bg-gray-800 border border-transparent rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-gray-900">Choose Pro</a>
+                </div>
+                <div class="pt-6 pb-8 px-6 flex-grow">
+                    <h3 class="text-xs font-semibold text-gray-900 tracking-wide uppercase">Everything in Starter, plus:</h3>
+                    <ul role="list" class="mt-4 space-y-3">
+                        <li class="flex space-x-3">
+                            <span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span>
+                            <span class="text-sm text-gray-500">Up to 1000 papers / month</span>
+                        </li>
+                        <li class="flex space-x-3">
+                            <span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span>
+                            <span class="text-sm text-gray-500">Advanced Batch Grading (larger batches)</span>
+                        </li>
+                         <li class="flex space-x-3">
+                            <span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span>
+                            <span class="text-sm text-gray-500">Batch download of graded papers</span>
+                        </li>
+                        <li class="flex space-x-3">
+                            <span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span>
+                            <span class="text-sm text-gray-500">Priority support</span>
+                        </li>
+                         <li class="flex space-x-3">
+                            <span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span>
+                            <span class="text-sm text-gray-500">Early access to new features</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div> <!-- End Pricing Grid -->
+
+        <!-- Optional: Add a section for FAQs or Contact -->
+        <div class="mt-16 text-center text-sm text-gray-600">
+            <p>Need a custom plan or have questions? <a href="#" class="font-medium text-blue-600 hover:text-blue-500">Contact Us</a></p>
+        </div>
+
+    </main>
+
+    <!-- Simple Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
+            © 2024 GradeWise AI. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Basic Mobile Menu Toggle Logic (if needed standalone)
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIconOpen = mobileMenuButton.querySelector('span.lucide:first-child'); // Menu bars
+        const menuIconClose = mobileMenuButton.querySelector('span.lucide:last-child'); // X icon
+
+        mobileMenuButton.addEventListener('click', () => {
+            const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+            mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+            mobileMenu.classList.toggle('hidden');
+            menuIconOpen.classList.toggle('hidden');
+            menuIconClose.classList.toggle('hidden');
+        });
+
+        // Add simple JS for data-page links if this is part of a larger SPA later
+        // document.querySelectorAll('a[data-page]').forEach(link => {
+        //     link.addEventListener('click', (e) => {
+        //         e.preventDefault();
+        //         const targetPage = e.currentTarget.getAttribute('data-page');
+        //         console.log(`Navigate to (simulated): ${targetPage}`);
+        //         // In a real SPA, you'd trigger your routing/page loading logic here
+        //         alert(`Simulating navigation to: ${targetPage}`);
+        //     });
+        // });
+    </script>
+
+</body>
+</html>

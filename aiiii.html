@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GradeWise AI - Smart Paper Grading</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      @font-face {
+        font-family: 'LucideIcons';
+        /* Using unpkg CDN for Lucide Icons font */
+        src: url('https://unpkg.com/lucide-static@latest/font/lucide.ttf') format('truetype');
+      }
+      .lucide {
+        font-family: 'LucideIcons';
+        font-size: 1.25rem; /* Adjust size as needed */
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        font-style: normal;
+        font-variant: normal;
+        text-rendering: auto;
+        display: inline-block; /* Better alignment */
+        vertical-align: middle;
+      }
+      /* Basic styles */
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8fafc; /* gray-50 */
+        color: #1f2937; /* gray-800 */
+      }
+      /* Helper class to hide elements */
+      .hidden {
+        display: none;
+      }
+      /* Style for the 3-panel layout (Defined but not used on landing page) */
+      .grading-panels {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr; /* Example ratios */
+        gap: 1rem;
+        /* Example height - adjust based on actual header/footer */
+        height: calc(100vh - 150px);
+      }
+       @media (max-width: 1024px) {
+         .grading-panels {
+            grid-template-columns: 1fr; /* Stack on smaller screens */
+            height: auto;
+         }
+       }
+      .panel {
+        background-color: white;
+        border-radius: 0.5rem; /* rounded-lg */
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow-md */
+        padding: 1rem; /* p-4 */
+        overflow-y: auto;
+      }
+      /* Simple progress bar styling (Defined but not used on landing page) */
+      .progress-bar-bg {
+        background-color: #e5e7eb; /* gray-200 */
+        border-radius: 0.375rem; /* rounded-md */
+        overflow: hidden;
+      }
+      .progress-bar-fill {
+        background-color: #3b82f6; /* blue-500 */
+        height: 1rem; /* h-4 */
+        border-radius: 0.375rem; /* rounded-md */
+        transition: width 0.3s ease-in-out;
+      }
+      /* Enhance link appearance */
+      a:hover {
+          text-decoration: none; /* Optional: remove underline on hover */
+      }
+      /* Style for feature icons */
+      .feature-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 3rem; /* h-12 */
+          width: 3rem; /* w-12 */
+          border-radius: 0.375rem; /* rounded-md */
+          background-color: #3b82f6; /* bg-blue-500 */
+          color: white;
+      }
+    </style>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              inter: ['Inter', 'sans-serif'],
+              lucide: ['LucideIcons']
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="text-gray-800">
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <!-- Link back to this landing page -->
+                    <a href="aiiii.html" class="flex-shrink-0 flex items-center text-xl font-bold text-blue-600 hover:text-blue-700 transition duration-150 ease-in-out">
+                        <span class="lucide mr-2"></span> GradeWise AI <!-- Graduation Cap -->
+                    </a>
+                </div>
+                <!-- Logged Out Desktop Links -->
+                <div class="hidden sm:ml-6 sm:flex sm:space-x-8 items-center" id="nav-links-logged-out">
+                    <a href="#features" data-scroll="features" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Features</a>
+                    <a href="plans.html" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Plans</a>
+                    <!-- Removed Demo link from logged-out nav -->
+                    <a href="login.html" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200">Log In</a>
+                    <a href="signup.html" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">Sign Up Free</a>
+                </div>
+                 <!-- Logged In Desktop Links -->
+                 <div class="hidden sm:ml-6 sm:flex sm:space-x-8 items-center" id="nav-links-logged-in">
+                    <a href="dashboard.html" class="inline-flex items-center px-1 pt-1 border-b-2 border-blue-500 text-sm font-medium text-gray-900">Dashboard</a>
+                    <!-- Link to the detailed grading page/tool -->
+                    <a href="gradewise_demo.html" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Grade Paper (Demo)</a>
+                    <a href="projects.html" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Projects</a>
+                    <a href="accounts.html" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Account</a>
+                    <!-- Logout links to login page -->
+                    <a href="login.html" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200">Log Out</a>
+                </div>
+                <!-- Mobile Menu Button -->
+                <div class="-mr-2 flex items-center sm:hidden">
+                    <button type="button" id="mobile-menu-button" class="bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <span class="lucide block h-6 w-6 menu-icon-open"></span> <!-- Menu Icon -->
+                        <span class="lucide hidden h-6 w-6 menu-icon-close"></span> <!-- Close Icon -->
+                     </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div class="sm:hidden hidden" id="mobile-menu">
+             <!-- Logged Out Mobile Links -->
+            <div class="pt-2 pb-3 space-y-1" id="mobile-nav-links-logged-out">
+                <a href="#features" data-scroll="features" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Features</a>
+                <a href="plans.html" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Plans</a>
+                <!-- Removed Demo link -->
+                <a href="login.html" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Log In</a>
+                <a href="signup.html" class="block pl-3 pr-4 py-2 border-l-4 border-blue-500 text-base font-medium text-blue-700 bg-blue-50">Sign Up Free</a>
+            </div>
+             <!-- Logged In Mobile Links -->
+             <div class="pt-2 pb-3 space-y-1 hidden" id="mobile-nav-links-logged-in">
+                <a href="dashboard.html" class="block pl-3 pr-4 py-2 border-l-4 border-blue-500 text-base font-medium text-blue-700 bg-blue-50">Dashboard</a>
+                <a href="gradewise_demo.html" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Grade Paper(Demo)</a>
+                <a href="projects.html" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Projects</a>
+                <a href="accounts.html" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Account</a>
+                <a href="login.html" class="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Log Out</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main id="page-container" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Landing Page Section -->
+        <section id="landing-page">
+            <!-- Hero Section -->
+            <div class="text-center pt-16 pb-24">
+                <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
+                    <span class="block xl:inline">Grade Smarter, Not Harder</span>
+                    <span class="block text-blue-600 xl:inline">with GradeWise AI</span>
+                </h1>
+                <p class="mt-4 max-w-md mx-auto text-lg text-gray-500 sm:text-xl md:mt-6 md:max-w-3xl">
+                    Reclaim your time with AI-powered paper grading. Get consistent, high-quality feedback suggestions in a fraction of the time, so you can focus more on teaching and less on the grading grind.
+                </p>
+                <div class="mt-8 max-w-md mx-auto sm:flex sm:justify-center md:mt-10">
+                    <div class="rounded-md shadow">
+                        <a href="signup.html" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10 transition duration-150 ease-in-out">
+                            Get Started Free
+                        </a>
+                    </div>
+                    <div class="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
+                        <a href="#features" data-scroll="features" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10 transition duration-150 ease-in-out">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+                 <!-- Removed Demo Try Limit Note -->
+            </div>
+
+            <!-- Features Section -->
+            <div id="features" class="py-16 bg-gray-100 overflow-hidden lg:py-24 rounded-lg">
+                <div class="relative max-w-xl mx-auto px-4 sm:px-6 lg:px-8 lg:max-w-7xl">
+                     <h2 class="text-center text-3xl leading-tight font-bold tracking-tight text-gray-900 sm:text-4xl mb-16">
+                        Everything You Need for Efficient & Effective Grading
+                     </h2>
+
+                     <!-- Feature 1: AI Assistance -->
+                    <div class="relative mt-12 lg:mt-20 lg:grid lg:grid-cols-2 lg:gap-12 lg:items-center">
+                        <div class="relative">
+                            <h3 class="text-2xl font-bold text-gray-900 tracking-tight sm:text-3xl">AI-Powered Grading Assistance</h3>
+                            <p class="mt-4 text-lg text-gray-600">
+                                Simply upload student papers (PDF, DOCX, TXT) and provide your grading criteria – an answer key, a detailed rubric, or even just key concepts. GradeWise AI analyzes the submission against your standards.
+                            </p>
+                            <dl class="mt-10 space-y-8">
+                                <div class="flex">
+                                    <div class="flex-shrink-0"><div class="feature-icon"><span class="lucide text-xl"></span></div></div> <!-- Check Square -->
+                                    <div class="ml-4">
+                                        <dt class="text-lg leading-6 font-medium text-gray-900">Flexible Criteria Input</dt>
+                                        <dd class="mt-2 text-base text-gray-500">Use various file types (PDF, DOCX, XLSX, TXT) or paste text directly. Define point values, keywords, and concepts for the AI to look for.</dd>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="flex-shrink-0"><div class="feature-icon"><span class="lucide text-xl"></span></div></div> <!-- Message Square -->
+                                    <div class="ml-4">
+                                        <dt class="text-lg leading-6 font-medium text-gray-900">Intelligent & Actionable Feedback</dt>
+                                        <dd class="mt-2 text-base text-gray-500">Receive AI-generated feedback suggestions, score justifications linked directly to the student's text, and summaries highlighting strengths and areas for improvement.</dd>
+                                    </div>
+                                </div>
+                                 <div class="flex">
+                                     <div class="flex-shrink-0"><div class="feature-icon"><span class="lucide text-xl"></span></div></div> <!-- Key -->
+                                    <div class="ml-4">
+                                        <dt class="text-lg leading-6 font-medium text-gray-900">Use Your Own API Key (Optional)</dt>
+                                        <dd class="mt-2 text-base text-gray-500">Maintain full control over AI usage and costs by securely adding your preferred provider's API key (like Google Gemini) in your account settings.</dd>
+                                    </div>
+                                </div>
+                            </dl>
+                        </div>
+
+                        <div class="mt-10 -mx-4 relative lg:mt-0" aria-hidden="true">
+                            <!-- Placeholder replaced with Unsplash image URL -->
+                            <img class="relative mx-auto rounded-lg shadow-xl" width="490"
+                                 src="https://images.unsplash.com/photo-1587620962725-abab7fe55159?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1031&q=80"
+                                 alt="GradeWise AI Interface showing code or analysis">
+                        </div>
+                    </div>
+
+                    <!-- Feature 2: Workflow -->
+                    <div class="relative mt-20 sm:mt-24 lg:mt-32">
+                        <div class="lg:grid lg:grid-flow-row-dense lg:grid-cols-2 lg:gap-12 lg:items-center">
+                            <div class="lg:col-start-2">
+                                <h3 class="text-2xl font-bold text-gray-900 tracking-tight sm:text-3xl">Streamline Your Entire Grading Workflow</h3>
+                                <p class="mt-4 text-lg text-gray-600">
+                                    Whether grading one paper meticulously or processing an entire class set, GradeWise AI adapts. Download annotated papers or summary reports effortlessly.
+                                </p>
+                                <dl class="mt-10 space-y-8">
+                                    <div class="flex">
+                                         <div class="flex-shrink-0"><div class="feature-icon"><span class="lucide text-xl"></span></div></div> <!-- Files -->
+                                        <div class="ml-4">
+                                            <dt class="text-lg leading-6 font-medium text-gray-900">Efficient Batch Grading</dt>
+                                            <dd class="mt-2 text-base text-gray-500">Upload a zip file containing multiple student papers, define the criteria once, and let GradeWise AI process the entire batch, ensuring consistency (Available on Starter & Pro plans).</dd>
+                                        </div>
+                                    </div>
+                                    <div class="flex">
+                                         <div class="flex-shrink-0"><div class="feature-icon"><span class="lucide text-xl"></span></div></div> <!-- Download -->
+                                        <div class="ml-4">
+                                            <dt class="text-lg leading-6 font-medium text-gray-900">Flexible Download Options</dt>
+                                            <dd class="mt-2 text-base text-gray-500">Download individually graded papers (PDF with annotations) or get a batch export (CSV summary or Zip of PDFs on Pro plans) for easy record-keeping.</dd>
+                                        </div>
+                                    </div>
+                                     <div class="flex">
+                                         <div class="flex-shrink-0"><div class="feature-icon"><span class="lucide text-xl"></span></div></div> <!-- Edit -->
+                                        <div class="ml-4">
+                                            <dt class="text-lg leading-6 font-medium text-gray-900">Complete Control & Override</dt>
+                                            <dd class="mt-2 text-base text-gray-500">You are always in charge. Easily review all AI suggestions, modify scores, edit feedback, and add your own personalized comments before finalizing.</dd>
+                                        </div>
+                                    </div>
+                                </dl>
+                            </div>
+
+                            <div class="mt-10 -mx-4 relative lg:mt-0 lg:col-start-1">
+                                 <!-- Placeholder replaced with Unsplash image URL -->
+                                <img class="relative mx-auto rounded-lg shadow-xl" width="490"
+                                     src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                                     alt="People working together representing efficient workflow">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- End Features Section -->
+
+            <!-- Plans Preview Section -->
+            <div id="plans" class="py-16 lg:py-24">
+                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <a href="plans.html" class="block text-center group">
+                        <h2 class="text-3xl leading-tight font-bold tracking-tight text-gray-900 sm:text-4xl mb-4 group-hover:text-blue-600">
+                            Choose the Plan That's Right For You
+                        </h2>
+                        <p class="text-xl text-gray-500 group-hover:text-blue-500">Simple, transparent pricing.</p>
+                    </a>
+
+                    <!-- Plan Preview Grid -->
+                    <div class="mt-12 space-y-8 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-8 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-3">
+                        <!-- Free Plan Preview -->
+                        <div class="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200 flex flex-col">
+                            <div class="p-6">
+                                <h3 class="text-2xl leading-6 font-medium text-gray-900">Free</h3>
+                                <p class="mt-2 text-sm text-gray-500">Get started with basic AI grading.</p>
+                                <p class="mt-4"><span class="text-4xl font-bold text-gray-900">$0</span><span class="text-base font-medium text-gray-500">/month</span></p>
+                                <a href="signup.html" class="mt-6 block w-full bg-gray-800 border border-transparent rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-gray-900">Sign up for Free</a>
+                            </div>
+                            <div class="pt-6 pb-8 px-6 flex-grow">
+                                <h4 class="text-xs font-medium text-gray-900 tracking-wide uppercase">Key Features</h4>
+                                <ul role="list" class="mt-4 space-y-2">
+                                    <li class="flex space-x-3"><span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span><span class="text-sm text-gray-500">10 papers/month</span></li> <!-- Check -->
+                                    <li class="flex space-x-3"><span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span><span class="text-sm text-gray-500">Single paper grading</span></li>
+                                    <li class="flex space-x-3"><span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span><span class="text-sm text-gray-500">BYOK enabled</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                         <!-- Starter Plan Preview -->
+                        <div class="border-2 border-blue-600 rounded-lg shadow-lg divide-y divide-gray-200 flex flex-col relative">
+                             <div class="absolute top-0 right-0 mr-4 -mt-3"><span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-blue-100 text-blue-800">Popular</span></div>
+                            <div class="p-6">
+                                <h3 class="text-2xl leading-6 font-medium text-gray-900">Starter</h3>
+                                <p class="mt-2 text-sm text-gray-500">Ideal for individual educators.</p>
+                                <p class="mt-4"><span class="text-4xl font-bold text-gray-900">$19</span><span class="text-base font-medium text-gray-500">/month</span></p>
+                                <a href="signup.html" class="mt-6 block w-full bg-blue-600 border border-transparent rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-blue-700">Get Started</a>
+                            </div>
+                            <div class="pt-6 pb-8 px-6 flex-grow">
+                                <h4 class="text-xs font-medium text-gray-900 tracking-wide uppercase">Includes Free, plus</h4>
+                                 <ul role="list" class="mt-4 space-y-2">
+                                    <li class="flex space-x-3"><span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span><span class="text-sm text-gray-500">500 papers/month</span></li>
+                                    <li class="flex space-x-3"><span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span><span class="text-sm text-gray-500">Basic Batch Grading</span></li>
+                                    <li class="flex space-x-3"><span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span><span class="text-sm text-gray-500">Save Rubrics</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Pro Plan Preview -->
+                         <div class="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200 flex flex-col">
+                            <div class="p-6">
+                                <h3 class="text-2xl leading-6 font-medium text-gray-900">Pro</h3>
+                                <p class="mt-2 text-sm text-gray-1000">For heavy users & departments.</p>
+                                <p class="mt-4"><span class="text-4xl font-bold text-gray-900">$49</span><span class="text-base font-medium text-gray-500">/month</span></p>
+                                <a href="signup.html" class="mt-6 block w-full bg-gray-800 border border-transparent rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-gray-900">Choose Pro</a>
+                            </div>
+                            <div class="pt-6 pb-8 px-6 flex-grow">
+                                <h4 class="text-xs font-medium text-gray-900 tracking-wide uppercase">Includes Starter, plus</h4>
+                                <ul role="list" class="mt-4 space-y-2">
+                                    <li class="flex space-x-3"><span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span><span class="text-sm text-gray-500">1000 papers/month</span></li>
+                                    <li class="flex space-x-3"><span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span><span class="text-sm text-gray-500">Advanced Batch Grading</span></li>
+                                    <li class="flex space-x-3"><span class="lucide text-green-500 flex-shrink-0 w-5 h-5"></span><span class="text-sm text-gray-500">Batch Download</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div> <!-- End Plan Preview Grid -->
+
+                    <div class="mt-10 text-center">
+                        <a href="plans.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 shadow-sm">
+                            View All Plans & Features
+                            <span class="lucide ml-2 -mr-1 h-5 w-5"></span> <!-- Arrow Right -->
+                        </a>
+                    </div>
+                 </div>
+            </div> <!-- End Plans Preview Section -->
+        </section> <!-- End Landing Page Section -->
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-base text-gray-500">© 2024 GradeWise AI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcons = mobileMenuButton.querySelectorAll('span.lucide'); // [open, close]
+        if (mobileMenuButton && mobileMenu && menuIcons.length === 2) {
+            mobileMenuButton.addEventListener('click', () => {
+                const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+                mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+                mobileMenu.classList.toggle('hidden');
+                menuIcons[0].classList.toggle('hidden'); menuIcons[1].classList.toggle('hidden');
+            });
+        }
+
+        // Smooth Scroll
+        document.querySelectorAll('a[data-scroll]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId.startsWith('#')) {
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        e.preventDefault();
+                        const navbar = document.querySelector('nav');
+                        const navbarHeight = navbar ? navbar.offsetHeight : 0;
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - navbarHeight - 20;
+                        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+                        if (mobileMenu && !mobileMenu.classList.contains('hidden')) { mobileMenuButton.click(); }
+                    }
+                }
+            });
+        });
+
+        // Simulated Login State (Show logged-out nav by default)
+        function setLoginState(loggedIn) {
+            const loggedOutNav = document.getElementById('nav-links-logged-out');
+            const loggedInNav = document.getElementById('nav-links-logged-in');
+            const mobileLoggedOutNav = document.getElementById('mobile-nav-links-logged-out');
+            const mobileLoggedInNav = document.getElementById('mobile-nav-links-logged-in');
+
+            loggedOutNav?.classList.toggle('hidden', loggedIn);
+            loggedInNav?.classList.toggle('hidden', !loggedIn);
+            mobileLoggedOutNav?.classList.toggle('hidden', loggedIn);
+            mobileLoggedInNav?.classList.toggle('hidden', !loggedIn);
+
+             // Ensure correct mobile section is displayed within the menu container
+             // This logic might need adjustment based on how mobileLoggedInNav/Out are structured in the final DOM
+             if (mobileLoggedInNav && mobileLoggedOutNav) {
+                 if(loggedIn) {
+                    // If logged in, ensure logged-in links are visible, logged-out are not
+                    mobileLoggedInNav.style.display = '';
+                    mobileLoggedOutNav.style.display = 'none';
+                 } else {
+                    // If logged out, ensure logged-out links are visible, logged-in are not
+                    mobileLoggedInNav.style.display = 'none';
+                    mobileLoggedOutNav.style.display = '';
+                 }
+             }
+        }
+        document.addEventListener('DOMContentLoaded', () => { setLoginState(false); }); // Default to logged out
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings - GradeWise AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      @font-face { font-family: 'LucideIcons'; src: url('https://unpkg.com/lucide-static@latest/font/lucide.ttf') format('truetype'); }
+      .lucide { font-family: 'LucideIcons'; font-size: 1.25rem; line-height: 1; display: inline-block; vertical-align: middle; }
+      body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1f2937; }
+      .hidden { display: none; }
+       /* Simple Tabs */
+      .tab-button { padding: 0.5rem 1rem; margin-right: 0.5rem; border-radius: 0.375rem; font-weight: 500; color: #4b5563; cursor: pointer; /* Added cursor */ }
+      .tab-button:hover { background-color: #e5e7eb; }
+      .tab-button.active { background-color: #dbeafe; color: #1d4ed8; }
+      .tab-content { border-top: 1px solid #e5e7eb; padding-top: 1.5rem; }
+
+      /* Input field styling */
+       .input-field {
+           margin-top: 0.25rem;
+           display: block;
+           width: 100%;
+           padding: 0.5rem 0.75rem;
+           border: 1px solid #d1d5db; /* border-gray-300 */
+           border-radius: 0.375rem; /* rounded-md */
+           box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+           background-color: white; /* <<< --- ADDED THIS LINE --- */
+           transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; /* Added transition */
+       }
+       .input-field:focus {
+           outline: none;
+           border-color: #3b82f6; /* focus:border-blue-500 */
+           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3); /* focus:ring-blue-500 focus:ring-opacity-50 */
+       }
+       /* Ensure disabled fields with specific bg override the base white */
+       .input-field:disabled.bg-gray-100 {
+            background-color: #f3f4f6; /* Tailwind's gray-100 */
+            cursor: not-allowed;
+       }
+
+       /* Button styling */
+       .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.5rem 1rem; border: 1px solid transparent; border-radius: 0.375rem; font-weight: 500; text-align: center; cursor: pointer; transition: background-color 0.15s ease-in-out; /* Added transition */ }
+       .btn-primary { background-color: #3b82f6; color: white; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); }
+       .btn-primary:hover { background-color: #2563eb; }
+       .btn-secondary { background-color: #e5e7eb; color: #374151; border-color: #d1d5db; }
+       .btn-secondary:hover { background-color: #d1d5db; }
+       /* Added specific danger button style for consistency */
+       .btn-danger { background-color: #fee2e2; color: #b91c1c; border-color: #fecaca; }
+       .btn-danger:hover { background-color: #fecaca; }
+    </style>
+    <script>
+      tailwind.config = { theme: { extend: { fontFamily: { inter: ['Inter', 'sans-serif'], lucide: ['LucideIcons'] } } } }
+    </script>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Navigation Bar (Logged In State) -->
+     <nav class="bg-white shadow-md sticky top-0 z-50">
+         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+             <div class="flex justify-between h-16">
+                  <div class="flex items-center">
+                     <a href="aiiii.html" class="flex-shrink-0 flex items-center text-xl font-bold text-blue-600 hover:text-blue-700">
+                         <span class="lucide mr-2"></span> GradeWise AI
+                     </a>
+                 </div>
+                 <div class="hidden sm:ml-6 sm:flex sm:space-x-8 items-center">
+                     <a href="dashboard.html" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Dashboard</a>
+                     <a href="gradewise_demo.html" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Grade Paper</a>
+                     <a href="projects.html" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Projects</a>
+                     <a href="account.html" class="inline-flex items-center px-1 pt-1 border-b-2 border-blue-500 text-sm font-medium text-gray-900" aria-current="page">Account</a>
+                     <a href="login.html" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200">Log Out</a>
+                 </div>
+                  <div class="-mr-2 flex items-center sm:hidden">
+                      <button type="button" id="mobile-menu-button" class="bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-controls="mobile-menu" aria-expanded="false">
+                          <span class="sr-only">Open main menu</span>
+                          <span class="lucide block h-6 w-6 menu-icon-open"></span>
+                          <span class="lucide hidden h-6 w-6 menu-icon-close"></span>
+                      </button>
+                  </div>
+             </div>
+         </div>
+          <div class="sm:hidden hidden" id="mobile-menu">
+              <div class="pt-2 pb-3 space-y-1">
+                 <a href="dashboard.html" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Dashboard</a>
+                 <a href="gradewise_demo.html" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Grade Paper</a>
+                 <a href="projects.html" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Projects</a>
+                 <a href="account.html" class="block pl-3 pr-4 py-2 border-l-4 border-blue-500 bg-blue-50 text-base font-medium text-blue-700" aria-current="page">Account</a>
+                 <a href="login.html" class="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800">Log Out</a>
+              </div>
+          </div>
+     </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <h1 class="text-3xl font-bold text-gray-900 mb-6">Account Settings</h1>
+
+        <div class="bg-white shadow sm:rounded-lg overflow-hidden">
+             <!-- Tabs Navigation -->
+            <div class="border-b border-gray-200 px-4 py-3 sm:px-6">
+                <nav class="-mb-px flex space-x-4" aria-label="Tabs">
+                    <button class="tab-button active" data-tab="profile">Profile</button>
+                    <button class="tab-button" data-tab="subscription">Subscription & Billing</button>
+                    <button class="tab-button" data-tab="apikeys">API Keys</button> <!-- Still uses JS to navigate -->
+                    <button class="tab-button" data-tab="preferences">Preferences</button>
+                </nav>
+            </div>
+
+            <!-- Tab Content Area -->
+             <div class="px-4 py-5 sm:p-6">
+
+                <!-- Profile Tab -->
+                <div id="tab-profile" class="tab-content">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Profile Information</h2>
+                    <!-- NOTE: The input fields below will now default to a white background due to the CSS change -->
+                    <form class="space-y-4" action="#" method="POST">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                             <div>
+                                <label for="profile-name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                                <input type="text" id="profile-name" name="name" value="Educator Name" class="input-field">
+                            </div>
+                             <div>
+                                <label for="profile-email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                                <!-- This field retains bg-gray-100 which should override the base input-field white bg -->
+                                <input type="email" id="profile-email" name="email" value="educator@example.com" disabled class="input-field bg-gray-100 cursor-not-allowed">
+                                <p class="text-xs text-gray-500 mt-1">Contact support to change your email address.</p>
+                            </div>
+                        </div>
+                        <div class="pt-2">
+                             <button type="submit" class="btn btn-primary">Save Profile Changes</button>
+                        </div>
+                    </form>
+
+                    <hr class="my-8 border-gray-200">
+
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Change Password</h2>
+                    <form class="space-y-4 max-w-md" action="#" method="POST">
+                         <div>
+                            <label for="current-password" class="block text-sm font-medium text-gray-700">Current Password</label>
+                            <input type="password" id="current-password" name="current_password" required class="input-field">
+                        </div>
+                         <div>
+                            <label for="new-password" class="block text-sm font-medium text-gray-700">New Password</label>
+                            <input type="password" id="new-password" name="new_password" required class="input-field">
+                        </div>
+                          <div>
+                            <label for="confirm-new-password" class="block text-sm font-medium text-gray-700">Confirm New Password</label>
+                            <input type="password" id="confirm-new-password" name="confirm_new_password" required class="input-field">
+                        </div>
+                         <div class="pt-2">
+                             <button type="submit" class="btn btn-primary">Update Password</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Subscription Tab -->
+                <div id="tab-subscription" class="tab-content hidden">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Subscription & Billing</h2>
+                    <div class="bg-gray-50 p-4 rounded-md border border-gray-200 space-y-3">
+                         <div class="flex justify-between items-center">
+                             <p class="text-sm font-medium text-gray-600">Current Plan:</p>
+                             <p class="text-sm font-semibold text-gray-900">Starter Plan ($19/month)</p>
+                         </div>
+                         <div class="flex justify-between items-center">
+                             <p class="text-sm font-medium text-gray-600">Next Billing Date:</p>
+                             <p class="text-sm text-gray-900">April 15, 2024</p>
+                         </div>
+                         <div class="flex justify-between items-center">
+                             <p class="text-sm font-medium text-gray-600">Monthly Usage:</p>
+                             <p class="text-sm text-gray-900">42 / 150 papers graded</p>
+                         </div>
+                         <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 28%"></div>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex flex-wrap gap-4">
+                        <a href="plans.html" class="btn btn-primary">Change Plan</a>
+                        <button type="button" class="btn btn-secondary">Update Payment Method</button>
+                        <button type="button" class="btn btn-secondary">View Billing History</button>
+                        <button type="button" class="btn btn-danger">Cancel Subscription</button> <!-- Changed to btn-danger -->
+                    </div>
+                </div>
+
+                 <!-- API Keys Tab Content (Direct link via JS) -->
+                 <div id="tab-apikeys" class="tab-content hidden">
+                    <!-- Content can be minimal as JS redirects -->
+                     <h2 class="text-xl font-semibold text-gray-800 mb-4">Manage API Keys</h2>
+                     <p class="text-gray-600 mb-4">Manage your personal API keys (BYOK). Click the button below to go to the dedicated page.</p>
+                     <a href="apikeys.html" class="btn btn-primary">
+                         <span class="lucide mr-2"></span> Go to API Key Management
+                     </a>
+                 </div>
+
+
+                <!-- Preferences Tab -->
+                <div id="tab-preferences" class="tab-content hidden">
+                     <h2 class="text-xl font-semibold text-gray-800 mb-4">Preferences</h2>
+                     <form class="space-y-6" action="#" method="POST">
+                         <div>
+                            <h3 class="text-lg font-medium text-gray-900">Notifications</h3>
+                            <p class="text-sm text-gray-500">Choose how you receive notifications.</p>
+                             <fieldset class="mt-4">
+                                <legend class="sr-only">Notification method</legend>
+                                <div class="space-y-4">
+                                    <div class="flex items-center">
+                                        <input id="email-notifications" name="notification-method" type="checkbox" checked class="h-4 w-4 border-gray-300 rounded text-blue-600 focus:ring-blue-500">
+                                        <label for="email-notifications" class="ml-3 block text-sm font-medium text-gray-700">Email Notifications</label>
+                                    </div>
+                                     <p class="text-xs text-gray-500 pl-7">Receive summaries and alerts via email.</p>
+                                     <div class="flex items-center">
+                                        <input id="in-app-notifications" name="notification-method" type="checkbox" class="h-4 w-4 border-gray-300 rounded text-blue-600 focus:ring-blue-500">
+                                        <label for="in-app-notifications" class="ml-3 block text-sm font-medium text-gray-700">In-App Notifications</label>
+                                    </div>
+                                     <p class="text-xs text-gray-500 pl-7">Show notifications within the GradeWise AI application.</p>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                         <hr class="border-gray-200">
+
+                         <div>
+                             <h3 class="text-lg font-medium text-gray-900">Default Settings</h3>
+                             <div class="mt-4 space-y-4">
+                                 <div>
+                                     <label for="default-ai-model" class="block text-sm font-medium text-gray-700">Default AI Model (if using GradeWise AI credits)</label>
+                                     <select id="default-ai-model" name="default_ai_model" class="input-field mt-1 max-w-xs">
+                                         <option>GradeWise Balanced (Recommended)</option>
+                                         <option>GradeWise Speed</option>
+                                         <option>GradeWise Accuracy</option>
+                                     </select>
+                                     <p class="text-xs text-gray-500 mt-1">Only applies if not using your own API Key.</p>
+                                 </div>
+                             </div>
+                         </div>
+
+                         <div class="pt-4">
+                             <button type="submit" class="btn btn-primary">Save Preferences</button>
+                         </div>
+                     </form>
+                </div>
+
+             </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-auto">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
+            © 2024 GradeWise AI. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Basic Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileIconOpen = mobileBtn.querySelector('.menu-icon-open');
+        const mobileIconClose = mobileBtn.querySelector('.menu-icon-close');
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            mobileIconOpen.classList.toggle('hidden');
+            mobileIconClose.classList.toggle('hidden');
+            mobileBtn.setAttribute('aria-expanded', mobileMenu.classList.contains('hidden') ? 'false' : 'true');
+        });
+
+         // Simple Tab Switching Logic
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+
+                // Special case for API Keys tab - redirect instead of showing content
+                if (tabId === 'apikeys') {
+                    window.location.href = 'apikeys.html'; // Navigate to the dedicated page
+                    return; // Stop further processing for this tab
+                }
+
+                // Deactivate all buttons and hide all content
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.add('hidden'));
+
+                // Activate the clicked button and show corresponding content
+                button.classList.add('active');
+                const activeContent = document.getElementById(`tab-${tabId}`);
+                if (activeContent) {
+                    activeContent.classList.remove('hidden');
+                }
+            });
+        });
+
+         // Ensure the default active tab's content is shown on load
+         document.addEventListener('DOMContentLoaded', () => {
+             const defaultActiveButton = document.querySelector('.tab-button.active');
+             if (defaultActiveButton) {
+                 const defaultTabId = defaultActiveButton.getAttribute('data-tab');
+                  // Don't try to show content for the API key tab on load if it happens to be default
+                  if (defaultTabId !== 'apikeys') {
+                     const defaultActiveContent = document.getElementById(`tab-${defaultTabId}`);
+                     if (defaultActiveContent) {
+                         defaultActiveContent.classList.remove('hidden');
+                     }
+                 }
+             }
+         });
+
+    </script>
+
+</body>
+</html>
