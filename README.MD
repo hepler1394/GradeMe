@@ -63,12 +63,12 @@ This is currently a **front-end only demonstration**.
 *(Optional: Add any CSS or JS folders/files if you created separate ones)*
 *   `(images/)`: (If you use local images like `placeholder1.png`, ensure they exist).
 
-## 🚨🚨 CRITICAL SECURITY WARNING - API KEY 🚨🚨
 
-The file `gradewise_demo.html` contains a **hardcoded Google Gemini API key** within its `<script>` tag:
+
+
 
 ```javascript
 // --- Hardcoded API Key (INSECURE - For Demo Only) ---
 // Replace with your actual key for local testing. Disable key afterwards.
-const HARDCODED_API_KEY = "AIzaSyClI8VW8G6_RdGQuse5dAUxHtefVke1qjc"; // EXAMPLE KEY
+const HARDCODED_API_KEY = "AIzaSyClI8VW8G6_RdGQuse5dLAULxHtefVke1qjc"; // EXAMPLE KEY
 // --- End Hardcoded API Key ---
